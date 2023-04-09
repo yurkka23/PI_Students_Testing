@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\EduHub",
+    "\\EduHub\\EduHub.Domain",
+    "\\EduHub\\EduHub.Domain\\Entities"
   ],
+  "SelectedNode": "\\EduHub\\EduHub.Domain\\Entities\\BaseEntity.cs",
   "PreviewInSolutionExplorer": false
 }

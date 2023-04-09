@@ -1,0 +1,25 @@
+﻿@model IEnumerable<EduHub.Application.DTOs.Admin.TeacherRequestDTO>;
+
+<div class="d-flex justify-content-around flex-wrap">
+ @foreach (var teacher in Model)
+ {
+     <div class="card m-4" style="width: 18rem;">
+          @if (@teacher.ProofImage != null)
+          {
+               <img class="card-img-top" style='width: 18rem; height: 14rem;  object-fit: cover' src="@teacher.ProofImage" />
+          }
+          else
+          {
+                <img class="card-img-top" style='width: 18rem; height: 14rem; object-fit: cover' src="https://localhost:7056/AppFiles/images/base-user-icon.jpg" />
+          }
+        <div class="card-body">
+            <h5 class="card-title">@teacher.FullName</h5>
+            <p class="card-text" style='height: 100px;  overflow: auto'>@teacher.Text</p>
+            <a asp-controller="Admin" asp-action="AddTeacher" asp-route-id=" @teacher.UserId" class="btn btn-success">Add Teacher</a>
+            <a asp-controller="Admin" asp-action="DenyTeacher" asp-route-id=" @teacher.UserId" class="btn btn-danger">Cancel</a>
+        </div>
+    </div>
+ }
+ </div>                 
+                    
+

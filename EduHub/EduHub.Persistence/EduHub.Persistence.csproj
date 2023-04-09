@@ -19,11 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EduHub.Application\EduHub.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DataContext\Configurations\" />
+    <ProjectReference Include="..\EduHub.Domain\EduHub.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -16,3 +16,41 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.logo {
+    color: darkblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+    font-weight: 600;
+}
+.logo-bg{
+    display: block;
+    width: fit-content;
+    color: aliceblue;
+    background-color:darkblue;
+    padding:3px 10px;
+    border-radius: 10px;
+    margin-top: -4px;
+}
+.logo-fg{
+    margin-left: 20px;
+}
+.width-30vw{
+    width: 30vw;
+}
+.width-100{
+    width: 100%;
+}
+
+.bg-whitegrey{
+    background-color: lightgray;
+}
+.font-size-12{
+    font-size: 12px;
+}
+
+.footer{
+    margin-top: 30px;
+}

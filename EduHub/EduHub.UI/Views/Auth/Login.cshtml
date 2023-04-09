@@ -1,0 +1,27 @@
+﻿@model EduHub.Application.ViewModels.Auth.LoginModel
+
+<form method="post" asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl" class="d-flex flex-column align-items-center">
+    <div class="d-flex flex-column align-items-start width-30vw">
+        <h2 class="logo align-self-center"><span class="logo-fg">Edu</span><span class="logo-bg">HUB</span></h2>
+        <h4>Sign in</h4>
+        <div>
+            <label asp-for="Email" class="text-secondary fs-6">E-mail</label><br />
+            <input asp-for="Email" class="rounded width-30vw"/>
+            <span asp-validation-for="Email" class="text-danger fs-6"></span>
+        </div>
+        <div>
+            <label asp-for="Password" class="text-secondary fs-6">Password</label><br />
+            <input asp-for="Password" class="rounded width-30vw" type="password"/>
+            <span asp-validation-for="Password" class="text-danger fs-6"></span>
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger fs-6"></div>
+        <div class="text-secondary fs-6">
+            Don't have an acount? <a class="text-dark d-inline" method="post" asp-controller="Auth" asp-action="Register"> Sign up</a>
+        </div>
+        <br />
+
+        <div class="align-self-center mt-5">
+            <input type="submit" value="Sign in" class="btn btn-dark align-self-center px-5 rounded-sm text-center"/>
+        </div>
+    </div>
+</form>

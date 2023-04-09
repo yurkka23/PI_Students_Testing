@@ -1,0 +1,41 @@
+﻿@model EduHub.Application.Models.Profile.TeacherRequestModel;
+
+
+<form asp-action="BecomeTeacher" asp-controller="Profile" method="post" enctype="multipart/form-data">
+    <table class="table">
+        <tr>
+            <td>
+                <div>
+                    <h4><label asp-for="ProofImage">Please add proof that you are teacher</label></h4>
+                    <br />
+                    <input asp-for="ProofImage" value="Add photo" class="btn btn-secondary"/>
+                    <span asp-validation-for="ProofImage"></span>
+                </div>
+            </td>
+        </tr>
+         <tr>
+            <td>
+                <div>
+                   <h5 class="form-group"><label asp-for="Text">Text</label></h5> 
+                    <br />
+                    <textarea asp-for="Text" style='width: 40%;' class="form-control"></textarea>
+                    <span asp-validation-for="Text"></span>
+                </div>
+            </td>
+        </tr>
+        <div asp-validation-summary="ModelOnly"></div>
+        <tr>
+            <td>
+                <p>
+                    <input type="submit" value="Sent" class="btn btn-success"/>
+                </p>
+                 <button asp-controller="Profile" asp-action="MyProfile" class="btn btn-dark">Back</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+
+
+   
