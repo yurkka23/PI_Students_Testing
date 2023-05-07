@@ -2,14 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EduHub.Persistence.DataContext.Configurations;
-
-public class TestResultConfiguration : IEntityTypeConfiguration<TestResult>
+namespace EduHub.Persistence.DataContext.Configurations
 {
-    public void Configure(EntityTypeBuilder<TestResult> builder)
+    public class TestResultConfiguration : IEntityTypeConfiguration<TestResult>
     {
-        builder.HasKey(x => x.Id);
-
+        public void Configure(EntityTypeBuilder<TestResult> builder)
+        {
+            builder.HasKey(x => x.Id);
+        }
     }
 }
-

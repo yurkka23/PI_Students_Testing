@@ -1,7 +1,9 @@
-﻿
-namespace EduHub.Domain.Exceptions;
-
-public class NoRightsException : Exception
+﻿namespace EduHub.Domain.Exceptions
 {
-    public NoRightsException(string message) : base($"{message} (no rights)") { }
+    public class NoRightsException : Exception
+    {
+        public NoRightsException(string message) : base($"{message} (no rights)")
+        {
+        }
+    }
 }

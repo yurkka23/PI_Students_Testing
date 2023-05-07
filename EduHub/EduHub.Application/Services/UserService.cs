@@ -1,141 +1,159 @@
-﻿using EduHub.Application.Interfaces;
+﻿using AutoMapper;
+using EduHub.Application.DTOs.User;
+using EduHub.Application.Interfaces;
+using EduHub.Application.Models.Profile;
+using EduHub.Domain.Entities;
+using EduHub.Domain.Exceptions;
 using EduHub.Persistence.Abstractions;
 using Microsoft.AspNetCore.Identity;
-using EduHub.Domain.Entities;
-using EduHub.Application.DTOs.User;
-using AutoMapper;
-using EduHub.Application.Models.Profile;
-using EduHub.Domain.Exceptions;
 
-namespace EduHub.Application.Services;
-
-public class UserService : IUserService
+namespace EduHub.Application.Services
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private UserManager<User> _userManager;
-    private readonly IMapper _mapper;
-    private readonly IFileService _fileService;
-
-
-    public UserService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper, IFileService fileService)
+    public class UserService : IUserService
     {
-        _unitOfWork = unitOfWork;
-        _userManager = userManager;
-        _mapper = mapper;
-        _fileService = fileService;
-    }
+        private readonly IFileService _fileService;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<User> _userManager;
 
-    public async Task<UserDTO> GetByIdAsync(Guid id)
-    {
-        var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(filter: x => x.Id == id);
-        return _mapper.Map<UserDTO>(user);
-    }
 
-    public async Task<UserDTO> GetByEmailAsync(string email)
-    {
-        var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(filter: x => x.Email == email);
-
-        return _mapper.Map<UserDTO>(user);
-    }
-
-    public async Task<UserDTO> GetUserProfileAsync(Guid userId)
-    {
-        var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(x => x.Id == userId);
-
-        return _mapper.Map<UserDTO>(user);
-    }
-    public async Task EditUserProfileAsync(Guid userId, EditProfileModel model)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
-
-        if(user.UserName != model.UserName.Trim())
+        public UserService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper,
+            IFileService fileService)
         {
-            var checkIfUsernameExists = _userManager.FindByNameAsync(model.UserName);
-            if(checkIfUsernameExists is not null) throw new BadRequestException("Such username already exists");
+            _unitOfWork = unitOfWork;
+            _userManager = userManager;
+            _mapper = mapper;
+            _fileService = fileService;
         }
 
-        if (user.Email != model.Email.Trim())
+        public async Task<UserDTO> GetByIdAsync(Guid id)
         {
-            var checkIfEmailExists = _userManager.FindByEmailAsync(model.Email);
-            if (checkIfEmailExists is not null) throw new BadRequestException("Such email already exists");
+            var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(x => x.Id == id);
+            return _mapper.Map<UserDTO>(user);
         }
 
-        user.UserName = model.UserName;
-        user.FirstName = model.FirstName;
-        user.LastName = model.LastName;
-        user.AboutMe = model.AboutMe;
-        user.Email = model.Email;
-
-        var result = await _userManager.UpdateAsync(user);
-
-        if (!result.Succeeded)
+        public async Task<UserDTO> GetByEmailAsync(string email)
         {
-            var errors = result.Errors.Select(e => e.Description);
+            var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(x => x.Email == email);
 
-            throw new BadRequestException(string.Join(", ", errors));
+            return _mapper.Map<UserDTO>(user);
         }
-    }
 
-    public async Task ChangePhotoAsync(Guid userId, ChangePhotoModel model)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
-
-        if (user.UserImgUrl is not null) _fileService.DeleteFile(user.UserImgUrl);
-
-        if (model.NewProfileImage is not null) user.UserImgUrl = await _fileService.SaveFile(model.NewProfileImage);
-
-        var result = await _userManager.UpdateAsync(user);
-        if (!result.Succeeded)
+        public async Task<UserDTO> GetUserProfileAsync(Guid userId)
         {
-            var errors = result.Errors.Select(e => e.Description);
+            var user = await _unitOfWork.Users.GetFirstOrDefaultAsync(x => x.Id == userId);
 
-            throw new BadRequestException(string.Join(", ", errors));
+            return _mapper.Map<UserDTO>(user);
         }
-    }
 
-    public async Task ChangePasswordAsync(Guid userId, ChangePasswordModel model)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
-
-        var resetPassResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
-        if (!resetPassResult.Succeeded)
+        public async Task EditUserProfileAsync(Guid userId, EditProfileModel model)
         {
-            var errors = resetPassResult.Errors.Select(e => e.Description);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
-            throw new BadRequestException(string.Join(", ", errors));
+            if (user.UserName != model.UserName.Trim())
+            {
+                var checkIfUsernameExists = _userManager.FindByNameAsync(model.UserName);
+                if (checkIfUsernameExists is not null)
+                {
+                    throw new BadRequestException("Such username already exists");
+                }
+            }
+
+            if (user.Email != model.Email.Trim())
+            {
+                var checkIfEmailExists = _userManager.FindByEmailAsync(model.Email);
+                if (checkIfEmailExists is not null)
+                {
+                    throw new BadRequestException("Such email already exists");
+                }
+            }
+
+            user.UserName = model.UserName;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.AboutMe = model.AboutMe;
+            user.Email = model.Email;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+
+                throw new BadRequestException(string.Join(", ", errors));
+            }
         }
-    }
 
-    public async Task BecomeTeacher(Guid userId, TeacherRequestModel model)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
-
-        var request = new TeacherRequest()
+        public async Task ChangePhotoAsync(Guid userId, ChangePhotoModel model)
         {
-            Id = Guid.NewGuid(),
-            Text = model.Text,
-            FullName = user.FirstName + ' ' + user.LastName,
-            UserId = userId,
-            ProofImage = await _fileService.SaveFile(model.ProofImage)
-        };
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
-        await _unitOfWork.TeacherRequests.InsertAsync(request);
-        await _unitOfWork.SaveAsync(userId);
-    }
+            if (user.UserImgUrl is not null)
+            {
+                _fileService.DeleteFile(user.UserImgUrl);
+            }
 
-    public async Task DeleteAcountAsync(Guid userId)
-    {
-        var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (model.NewProfileImage is not null)
+            {
+                user.UserImgUrl = await _fileService.SaveFile(model.NewProfileImage);
+            }
 
-        if (user is null) throw new BadRequestException("Sucn user doesn't exists");
-        
-        var result = await _userManager.DeleteAsync(user);
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
 
-        if (!result.Succeeded)
+                throw new BadRequestException(string.Join(", ", errors));
+            }
+        }
+
+        public async Task ChangePasswordAsync(Guid userId, ChangePasswordModel model)
         {
-            var errors = result.Errors.Select(e => e.Description);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
-            throw new BadRequestException(string.Join(", ", errors));
+            var resetPassResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
+            if (!resetPassResult.Succeeded)
+            {
+                var errors = resetPassResult.Errors.Select(e => e.Description);
+
+                throw new BadRequestException(string.Join(", ", errors));
+            }
+        }
+
+        public async Task BecomeTeacher(Guid userId, TeacherRequestModel model)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            var request = new TeacherRequest
+            {
+                Id = Guid.NewGuid(),
+                Text = model.Text,
+                FullName = user.FirstName + ' ' + user.LastName,
+                UserId = userId,
+                ProofImage = await _fileService.SaveFile(model.ProofImage)
+            };
+
+            await _unitOfWork.TeacherRequests.InsertAsync(request);
+            await _unitOfWork.SaveAsync(userId);
+        }
+
+        public async Task DeleteAcountAsync(Guid userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user is null)
+            {
+                throw new BadRequestException("Sucn user doesn't exists");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+
+                throw new BadRequestException(string.Join(", ", errors));
+            }
         }
     }
 }

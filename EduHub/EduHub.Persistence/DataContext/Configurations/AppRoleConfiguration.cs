@@ -1,41 +1,40 @@
-﻿
-
-using EduHub.Domain.Constants;
+﻿using EduHub.Domain.Constants;
 using EduHub.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EduHub.Persistence.DataContext.Configurations;
-
-public class AppRoleConfiguration : IEntityTypeConfiguration<AppRole>
+namespace EduHub.Persistence.DataContext.Configurations
 {
-    public void Configure(EntityTypeBuilder<AppRole> builder)
+    public class AppRoleConfiguration : IEntityTypeConfiguration<AppRole>
     {
-        builder.HasMany(ur => ur.UserRoles)
-             .WithOne(u => u.Role)
-             .HasForeignKey(ur => ur.RoleId)
-             .IsRequired();
-
-        //seed
-        builder.HasData(new AppRole
+        public void Configure(EntityTypeBuilder<AppRole> builder)
         {
-            Id = Guid.NewGuid(),
-            Name = RoleConstants.AdminRole,
-            NormalizedName = RoleConstants.AdminRole.ToUpper()
-        });
+            builder.HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
 
-        builder.HasData(new AppRole
-        {
-            Id = Guid.NewGuid(),
-            Name = RoleConstants.StudentRole,
-            NormalizedName = RoleConstants.StudentRole.ToUpper()
-        });
+            //seed
+            builder.HasData(new AppRole
+            {
+                Id = Guid.NewGuid(),
+                Name = RoleConstants.AdminRole,
+                NormalizedName = RoleConstants.AdminRole.ToUpper()
+            });
 
-        builder.HasData(new AppRole
-        {
-            Id = Guid.NewGuid(),
-            Name = RoleConstants.TeacherRole,
-            NormalizedName = RoleConstants.TeacherRole.ToUpper()
-        });
+            builder.HasData(new AppRole
+            {
+                Id = Guid.NewGuid(),
+                Name = RoleConstants.StudentRole,
+                NormalizedName = RoleConstants.StudentRole.ToUpper()
+            });
+
+            builder.HasData(new AppRole
+            {
+                Id = Guid.NewGuid(),
+                Name = RoleConstants.TeacherRole,
+                NormalizedName = RoleConstants.TeacherRole.ToUpper()
+            });
+        }
     }
 }

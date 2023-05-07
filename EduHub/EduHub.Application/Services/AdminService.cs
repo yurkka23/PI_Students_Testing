@@ -7,148 +7,170 @@ using EduHub.Domain.Entities;
 using EduHub.Domain.Exceptions;
 using EduHub.Persistence.Abstractions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
-namespace EduHub.Application.Services;
-
-public class AdminService : IAdminService
+namespace EduHub.Application.Services
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private UserManager<User> _userManager;
-    private readonly IMapper _mapper;
-    private readonly IFileService _fileService;
-
-    public AdminService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper, IFileService fileService)
+    public class AdminService : IAdminService
     {
-        _unitOfWork = unitOfWork;
-        _userManager = userManager;
-        _mapper = mapper;
-        _fileService = fileService;
-    }
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<User> _userManager;
 
-    public async Task<IEnumerable<TeacherRequestDTO>> GetTeachersRequestsAsync()
-    {
-        var requests = await _unitOfWork.TeacherRequests.GetAsync();
-
-        return _mapper.Map<IEnumerable<TeacherRequestDTO>>(requests);
-    }
-    public async Task AddTeacherAsync(Guid teacherId, Guid adminId)
-    {
-        var user = await _userManager.FindByIdAsync(teacherId.ToString());
-
-        if (user is null) throw new BadRequestException("Such user doesn't exists");
-
-        var result = await _userManager.RemoveFromRoleAsync(user, RoleConstants.StudentRole);
-
-        if (!result.Succeeded)
+        public AdminService(IUnitOfWork unitOfWork, UserManager<User> userManager, IMapper mapper)
         {
-            var errors = result.Errors.Select(e => e.Description);
-
-            throw new BadRequestException(string.Join(", ", errors));
+            _unitOfWork = unitOfWork;
+            _userManager = userManager;
+            _mapper = mapper;
         }
 
-        var result1 = await _userManager.AddToRoleAsync(user, RoleConstants.TeacherRole);
-
-        if (!result1.Succeeded)
+        public async Task<IEnumerable<TeacherRequestDTO>> GetTeachersRequestsAsync()
         {
-            var errors = result1.Errors.Select(e => e.Description);
+            var requests = await _unitOfWork.TeacherRequests.GetAsync();
 
-            throw new BadRequestException(string.Join(", ", errors));
+            return _mapper.Map<IEnumerable<TeacherRequestDTO>>(requests);
         }
 
-        var deleteReuests = await _unitOfWork.TeacherRequests.GetAsync(t => t.UserId == teacherId);
-        foreach(var userDelete in deleteReuests)
+        public async Task AddTeacherAsync(Guid teacherId, Guid adminId)
         {
-            _unitOfWork.TeacherRequests.Delete(userDelete);
+            var user = await _userManager.FindByIdAsync(teacherId.ToString());
+
+            if (user is null)
+            {
+                throw new BadRequestException("Such user doesn't exists");
+            }
+
+            var result = await _userManager.RemoveFromRoleAsync(user, RoleConstants.StudentRole);
+
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+
+                throw new BadRequestException(string.Join(", ", errors));
+            }
+
+            var result1 = await _userManager.AddToRoleAsync(user, RoleConstants.TeacherRole);
+
+            if (!result1.Succeeded)
+            {
+                var errors = result1.Errors.Select(e => e.Description);
+
+                throw new BadRequestException(string.Join(", ", errors));
+            }
+
+            var deleteReuests = await _unitOfWork.TeacherRequests.GetAsync(t => t.UserId == teacherId);
+            foreach (var userDelete in deleteReuests)
+            {
+                _unitOfWork.TeacherRequests.Delete(userDelete);
+            }
+
+            var res = _unitOfWork.SaveAsync(adminId);
         }
-        var res = _unitOfWork.SaveAsync(adminId);
-    }
-    public async Task RemoveFromTeacherAsync(Guid teacherId)
-    {
-        var user = await _userManager.FindByIdAsync(teacherId.ToString());
 
-        if (user is null) throw new BadRequestException("Such user doesn't exists");
-
-        var result = await _userManager.RemoveFromRoleAsync(user, RoleConstants.TeacherRole);
-
-        if (!result.Succeeded)
+        public async Task RemoveFromTeacherAsync(Guid teacherId)
         {
-            var errors = result.Errors.Select(e => e.Description);
+            var user = await _userManager.FindByIdAsync(teacherId.ToString());
 
-            throw new BadRequestException(string.Join(", ", errors));
+            if (user is null)
+            {
+                throw new BadRequestException("Such user doesn't exists");
+            }
+
+            var result = await _userManager.RemoveFromRoleAsync(user, RoleConstants.TeacherRole);
+
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+
+                throw new BadRequestException(string.Join(", ", errors));
+            }
+
+            var result1 = await _userManager.AddToRoleAsync(user, RoleConstants.StudentRole);
+
+            if (!result1.Succeeded)
+            {
+                var errors = result1.Errors.Select(e => e.Description);
+
+                throw new BadRequestException(string.Join(", ", errors));
+            }
         }
 
-        var result1 = await _userManager.AddToRoleAsync(user, RoleConstants.StudentRole);
-
-        if (!result1.Succeeded)
+        public async Task DenyTeacherAsync(Guid teacherId, Guid adminId)
         {
-            var errors = result1.Errors.Select(e => e.Description);
+            var user = await _userManager.FindByIdAsync(teacherId.ToString());
 
-            throw new BadRequestException(string.Join(", ", errors));
+            if (user is null)
+            {
+                throw new BadRequestException("Such user doesn't exists");
+            }
+
+            var deleteReuests = await _unitOfWork.TeacherRequests.GetAsync(t => t.UserId == teacherId);
+            foreach (var userDelete in deleteReuests)
+            {
+                _unitOfWork.TeacherRequests.Delete(userDelete);
+            }
+
+            var res = _unitOfWork.SaveAsync(adminId);
         }
-    }
 
-    public async Task DenyTeacherAsync(Guid teacherId, Guid adminId)
-    {
-        var user = await _userManager.FindByIdAsync(teacherId.ToString());
-
-        if (user is null) throw new BadRequestException("Such user doesn't exists");
-
-        var deleteReuests = await _unitOfWork.TeacherRequests.GetAsync(t => t.UserId == teacherId);
-        foreach (var userDelete in deleteReuests)
+        public async Task<(IEnumerable<UserDTO> teachers, int count)> GetTeachersAsync(int pageNum, int _sizeLimit,
+            string search)
         {
-            _unitOfWork.TeacherRequests.Delete(userDelete);
-        }
-        var res = _unitOfWork.SaveAsync(adminId);
-    }
+            if (search != null)
+            {
+                pageNum = 1;
 
-    public async Task<(IEnumerable<UserDTO> teachers, int count)> GetTeachersAsync(int pageNum, int _sizeLimit, string search)
-    {
-        if (search != null)
-        {
-            pageNum = 1;
+                var teachersSearch = _mapper.Map<IEnumerable<UserDTO>>(
+                    (await _userManager.GetUsersInRoleAsync(RoleConstants.TeacherRole))
+                    .Where(t => t.Email.Contains(search) || t.FirstName.Contains(search) ||
+                                t.LastName.Contains(search) || t.UserName.Contains(search)));
 
-            var teachersSearch = _mapper.Map<IEnumerable<UserDTO>>((await _userManager.GetUsersInRoleAsync(RoleConstants.TeacherRole))
-                .Where(t => t.Email.Contains(search) || t.FirstName.Contains(search) || t.LastName.Contains(search) || t.UserName.Contains(search)));
+                var countSearch = (await _userManager.GetUsersInRoleAsync(RoleConstants.TeacherRole))
+                    .Where(t => t.Email.Contains(search) || t.FirstName.Contains(search) ||
+                                t.LastName.Contains(search) || t.UserName.Contains(search))
+                    .Count();
 
-            var countSearch = (await _userManager.GetUsersInRoleAsync(RoleConstants.TeacherRole))
-                .Where(t => t.Email.Contains(search) || t.FirstName.Contains(search) || t.LastName.Contains(search) || t.UserName.Contains(search))
+                return (teachersSearch, countSearch);
+            }
+
+            var man = await _userManager.FindByIdAsync(Guid.Parse("D1800BD2-5C37-408F-A3CB-6AFB635B4717").ToString());
+            var count = (await _userManager.GetUsersInRoleAsync(RoleConstants.TeacherRole))
                 .Count();
 
-            return (teachersSearch, countSearch);
+            var teachers = _mapper.Map<IEnumerable<UserDTO>>(
+                (await _userManager.GetUsersInRoleAsync(RoleConstants.TeacherRole))
+                .Skip((pageNum - 1) * pageNum).Take(_sizeLimit));
+
+            return (teachers, count);
         }
 
-        int count = (await _userManager.GetUsersInRoleAsync(RoleConstants.TeacherRole))
-                .Count();
-
-        var teachers = _mapper.Map<IEnumerable<UserDTO>>((await _userManager.GetUsersInRoleAsync(RoleConstants.TeacherRole))
-           .Skip((pageNum - 1) * pageNum).Take(_sizeLimit));
-
-        return (teachers, count);
-    }
-    public async Task<(IEnumerable<UserDTO> students, int count)> GetStudentsAsync(int pageNum, int _sizeLimit, string search)
-    {
-        if (search != null)
+        public async Task<(IEnumerable<UserDTO> students, int count)> GetStudentsAsync(int pageNum, int _sizeLimit,
+            string search)
         {
-            pageNum = 1;
+            if (search != null)
+            {
+                pageNum = 1;
 
-            var studentsSearch = _mapper.Map<IEnumerable<UserDTO>>((await _userManager.GetUsersInRoleAsync(RoleConstants.StudentRole))
-                .Where(t => t.Email.Contains(search) || t.FirstName.Contains(search) || t.LastName.Contains(search) || t.UserName.Contains(search)));
-              
-            var countSearch = (await _userManager.GetUsersInRoleAsync(RoleConstants.StudentRole))
-                .Where(t => t.Email.Contains(search) || t.FirstName.Contains(search) || t.LastName.Contains(search) || t.UserName.Contains(search))
+                var studentsSearch = _mapper.Map<IEnumerable<UserDTO>>(
+                    (await _userManager.GetUsersInRoleAsync(RoleConstants.StudentRole))
+                    .Where(t => t.Email.Contains(search) || t.FirstName.Contains(search) ||
+                                t.LastName.Contains(search) || t.UserName.Contains(search)));
+
+                var countSearch = (await _userManager.GetUsersInRoleAsync(RoleConstants.StudentRole))
+                    .Where(t => t.Email.Contains(search) || t.FirstName.Contains(search) ||
+                                t.LastName.Contains(search) || t.UserName.Contains(search))
+                    .Count();
+
+                return (studentsSearch, countSearch);
+            }
+
+            var count = (await _userManager.GetUsersInRoleAsync(RoleConstants.StudentRole))
                 .Count();
 
-            return (studentsSearch, countSearch);
+            var students = _mapper.Map<IEnumerable<UserDTO>>(
+                (await _userManager.GetUsersInRoleAsync(RoleConstants.StudentRole))
+                .Skip((pageNum - 1) * pageNum).Take(_sizeLimit));
+
+            return (students, count);
         }
-
-        int count = (await _userManager.GetUsersInRoleAsync(RoleConstants.StudentRole))
-                .Count();
-  
-        var students = _mapper.Map<IEnumerable<UserDTO>>((await _userManager.GetUsersInRoleAsync(RoleConstants.StudentRole))
-            .Skip((pageNum - 1) * pageNum).Take(_sizeLimit));
-        
-        return (students, count);
     }
-
 }

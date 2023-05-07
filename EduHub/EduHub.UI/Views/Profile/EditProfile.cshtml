@@ -6,63 +6,60 @@
         <tr>
             <td>
                 <div>
-                    <h6><label asp-for="UserName">New username</label></h6>
-                    <input asp-for="UserName" value="@Model.UserName"  class="form-control w-25"/>
+                    <h6>
+                        <label asp-for="UserName">New username</label>
+                    </h6>
+                    <input asp-for="UserName" value="@Model.UserName" class="form-control w-25"/>
                     <span asp-validation-for="UserName"></span>
-                </div>
-            </td>
-        </tr>
-         <tr>
-            <td>
-                <div>
-                    <h6><label asp-for="FirstName">New first name</label></h6>
-                    <input asp-for="FirstName" value="@Model.FirstName"  class="form-control w-25"/>
-                    <span asp-validation-for="FirstName"></span>
-                </div>
-                <div>
-                    <h6><label asp-for="LastName">New last name</label></h6>
-                    <input asp-for="LastName" value="@Model.LastName"  class="form-control w-25"/>
-                    <span asp-validation-for="LastName"></span>
-                </div>
-            </td>
-        </tr>
-         <tr>
-            <td>
-                <div>
-                    <h6><label asp-for="AboutMe">About Me</label><br /></h6>
-                    <textarea asp-for="AboutMe" value="@Model.AboutMe" class="form-control w-25" ></textarea>
-                    <span asp-validation-for="AboutMe"></span>
                 </div>
             </td>
         </tr>
         <tr>
             <td>
                 <div>
-                    <h6><label asp-for="Email">New email</label></h6>
-                    <input asp-for="Email" value="@Model.Email"  class="form-control w-25" />
-                    <span asp-validation-for="Email"></span>
+                    <h6>
+                        <label asp-for="FirstName">New first name</label>
+                    </h6>
+                    <input asp-for="FirstName" value="@Model.FirstName" class="form-control w-25"/>
+                    <span asp-validation-for="FirstName"></span>
+                </div>
+                <div>
+                    <h6>
+                        <label asp-for="LastName">New last name</label>
+                    </h6>
+                    <input asp-for="LastName" value="@Model.LastName" class="form-control w-25"/>
+                    <span asp-validation-for="LastName"></span>
                 </div>
             </td>
         </tr>
+        <tr>
+            <td>
+                <div>
+                    <h6>
+                        <label asp-for="AboutMe">About Me</label><br/>
+                    </h6>
+                    <textarea asp-for="AboutMe" value="@Model.AboutMe" class="form-control w-25" ></textarea>
+                    <span asp-validation-for="AboutMe"></span>
+                </div>
+            </td>
+        </tr>
+                   
+        <input asp-for="Email" value="@Model.Email" hidden class="form-control w-25"/>
+           
         <tr>
             <div asp-validation-summary="ModelOnly"></div>
         </tr>
         <tr>
             <td>
                 <p>
-                    <input type="submit" value="Update"  class="btn btn-success"/>
+                    <input type="submit" value="Update" class="btn btn-success"/>
                 </p>
             </td>
         </tr>
         <tr>
             <td>
-                 <button asp-controller="Profile" asp-action="MyProfile" class="btn btn-dark">Back</button>
+                <button asp-controller="Profile" asp-action="MyProfile" class="btn btn-dark">Back</button>
             </td>
         </tr>
     </table>
 </form>
-
-
-
-
-   

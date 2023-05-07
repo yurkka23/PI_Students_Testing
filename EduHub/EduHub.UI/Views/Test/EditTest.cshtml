@@ -1,0 +1,79 @@
+﻿@using System.Globalization
+@model EduHub.UI.ViewModels.Test.EditTestVM;
+
+<div class="teachers-courses-wrapper">
+    <div class="courses-sidebar">
+        <h3>My courses</h3>
+        <a class="add-course" method="post" asp-controller="Course" asp-action="AddCourse"><i class="bi bi-plus-circle"></i> Add course</a>
+        @foreach (var course in Model.Courses)
+        {
+            if(Model.EditTest?.CourseId == course.Id)
+            {
+                 <a class="side-title-course active-link-sidebar" asp-controller="Course" asp-action="Course" asp-route-id="@course.Id">
+                    <i class="bi bi-chevron-right"></i>@course.Name
+                </a>
+            }
+            else
+            {
+                <a class="side-title-course" asp-controller="Course" asp-action="Course" asp-route-id="@course.Id">
+                    <i class="bi bi-chevron-right"></i>@course.Name
+                </a>
+            }
+        }
+
+    </div>
+
+    <div class="content p-4">
+              
+<form method="post" asp-controller="Test" asp-action="EditTest" enctype="multipart/form-data" class="d-flex flex-column align-items-center">
+    <div class="d-flex flex-column align-items-start width-30vw p-4">
+        <h5> Edit test</h5>
+
+        <input asp-for="EditTest.CourseId" value="@Model.EditTest?.CourseId" hidden/>
+        <input asp-for="EditTest.Id" value="@Model.EditTest?.Id" hidden/>
+
+
+        <div>
+            <label asp-for="EditTest.Name" class="text-secondary fs-6">Name</label><br/>
+            <input asp-for="EditTest.Name"  value="@Model.EditTest?.Name" class="rounded width-30vw"/>
+            <span asp-validation-for="EditTest.Name" class="text-danger fs-6"></span>
+        </div>
+        <div>
+            <label asp-for="EditTest.Description" class="text-secondary fs-6">Description</label><br/>
+            <input asp-for="EditTest.Description"  value="@Model.EditTest?.Description" class="rounded width-30vw"/>
+            <span asp-validation-for="EditTest.Description" class="text-danger fs-6"></span>
+        </div>
+        <div>
+            <label asp-for="EditTest.DurationMinutes" class="text-secondary fs-6">Duration Minutes</label><br/>
+            <input asp-for="EditTest.DurationMinutes"  value="@Model.EditTest?.DurationMinutes" min="0" class="rounded width-30vw"/>
+            <span asp-validation-for="EditTest.DurationMinutes" class="text-danger fs-6"></span>
+        </div>
+
+        <div>
+            <label asp-for="EditTest.StartTime" class="text-secondary fs-6">Start Time</label><br/>
+            <input asp-for="EditTest.StartTime"  value="@Model.EditTest?.StartTime.ToString("s",CultureInfo.GetCultureInfo("de-DE"))" type="datetime-local"  min="2023-04-28T00:00" class="rounded width-30vw"/>
+            <span asp-validation-for="EditTest.StartTime" class="text-danger fs-6"></span>
+        </div>
+
+        <div>
+            <label asp-for="EditTest.EndTime" class="text-secondary fs-6">End Time</label><br/>
+            <input asp-for="EditTest.EndTime" type="datetime-local"  value="@Model.EditTest?.EndTime.ToString("s",CultureInfo.GetCultureInfo("de-DE"))"  min="2023-04-28T00:00" class="rounded width-30vw"/>
+            <span asp-validation-for="EditTest.EndTime" class="text-danger fs-6"></span>
+        </div>
+
+        <br/>
+          <div asp-validation-summary="ModelOnly"></div>
+        <br/>
+
+        <div class="align-self-center mb-2">
+            <input type="submit" value="Edit" class="btn btn-dark align-self-center px-5 rounded-sm text-center"/>
+        </div>
+    </div>
+</form>
+
+     </div>
+
+</div>
+
+
+      

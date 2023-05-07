@@ -1,15 +1,12 @@
-﻿
-
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
 
-namespace EduHub.Application.Models.Profile;
-
-public class TeacherRequestModel
+namespace EduHub.Application.Models.Profile
 {
-    [Required]
-    public IFormFile ProofImage { get; set; }
+    public class TeacherRequestModel
+    {
+        [Required] public IFormFile ProofImage { get; set; }
 
-    [Required]
-    public string Text { get; set; }
+        [Required] public string Text { get; set; }
+    }
 }

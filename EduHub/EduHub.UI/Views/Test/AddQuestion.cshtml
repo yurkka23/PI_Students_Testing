@@ -1,0 +1,76 @@
+﻿@using System.Globalization
+@using EduHub.Domain.Enums;
+@model EduHub.UI.ViewModels.Question.AddQuestionVM;
+
+<div class="teachers-courses-wrapper">
+    <div class="courses-sidebar">
+        <h3>My courses</h3>
+        <a class="add-course" method="post" asp-controller="Course" asp-action="AddCourse"><i class="bi bi-plus-circle"></i> Add course</a>
+        @foreach (var course in Model.Courses)
+        {
+            if(Model.Test?.CourseId == course.Id)
+            {
+                 <a class="side-title-course active-link-sidebar" asp-controller="Course" asp-action="Course" asp-route-id="@course.Id">
+                    <i class="bi bi-chevron-right"></i>@course.Name
+                </a>
+            }
+            else
+            {
+                <a class="side-title-course" asp-controller="Course" asp-action="Course" asp-route-id="@course.Id">
+                    <i class="bi bi-chevron-right"></i>@course.Name
+                </a>
+            }
+        }
+
+    </div>
+
+    <div class="content p-4">
+        <h4>Test name: @Model.Test?.Name</h4>
+        <div>Description: @Model.Test?.Description</div>
+         <div class="card-text">Start at:  @Model.Test?.StartTime.ToString("G",CultureInfo.GetCultureInfo("de-DE"))</div>
+         <div class="card-text">End at:  @Model.Test?.EndTime.ToString("G",CultureInfo.GetCultureInfo("de-DE"))</div>
+         <div class="card-text">Duration:  @Model.Test?.DurationMinutes</div>
+
+
+ <form method="post" asp-controller="Test" asp-action="AddQuestion" enctype="multipart/form-data" class="d-flex flex-column align-items-center">
+    <div class="d-flex flex-column align-items-start width-30vw p-4">
+        <h5> Add Question</h5>
+
+        <input asp-for="AddQuestion.TestId" value="@Model.Test?.Id" hidden/>
+        <div>
+            <label asp-for="AddQuestion.QuestionContent" class="text-secondary fs-6">Question</label><br/>
+            <input asp-for="AddQuestion.QuestionContent" class="rounded width-30vw"/>
+            <span asp-validation-for="AddQuestion.QuestionContent" class="text-danger fs-6"></span>
+        </div>
+        <div>
+            <label asp-for="AddQuestion.Points" class="text-secondary fs-6">Points</label><br/>
+            <input asp-for="AddQuestion.Points" min="0" class="rounded width-30vw"/>
+            <span asp-validation-for="AddQuestion.Points" class="text-danger fs-6"></span>
+        </div>
+
+        <div>
+            <label asp-for="AddQuestion.Type" class="text-secondary fs-6">Type</label><br/>
+            <select asp-for="AddQuestion.Type" class="rounded width-30vw">
+                 @foreach (var type in Enum.GetValues(typeof(QuestionType)))
+                 {
+                    <option value="@type">@type</option>
+                 }
+            </select>
+            <span asp-validation-for="AddQuestion.Type" class="text-danger fs-6"></span>
+        </div>
+
+     
+
+        <br/>
+          <div asp-validation-summary="ModelOnly"></div>
+        <br/>
+
+        <div class="align-self-center mb-2">
+            <input type="submit" value="Add Question" class="btn btn-dark align-self-center px-5 rounded-sm text-center"/>
+        </div>
+    </div>
+</form>
+     </div>
+
+</div>
+

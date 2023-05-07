@@ -1,31 +1,20 @@
-﻿
-namespace EduHub.Application.Models.PaginatedList;
-public class PaginatedListModel<T>
+﻿namespace EduHub.Application.Models.PaginatedList
 {
-    public int PageNumber { get; private set; }
-    public int TotalPages { get; private set; }
-    public List<T> Items { get; set; }
-
-    public PaginatedListModel(List<T> items, int count, int pageNumber, int pageSize)
+    public class PaginatedListModel<T>
     {
-        PageNumber = pageNumber;
-        TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-        Items = items;  
-    }
-
-    public bool HasPreviousPage
-    {
-        get
+        public PaginatedListModel(List<T> items, int count, int pageNumber, int pageSize)
         {
-            return (PageNumber > 1);
+            PageNumber = pageNumber;
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+            Items = items;
         }
-    }
 
-    public bool HasNextPage
-    {
-        get
-        {
-            return (PageNumber < TotalPages);
-        }
+        public int PageNumber { get; }
+        public int TotalPages { get; }
+        public List<T> Items { get; set; }
+
+        public bool HasPreviousPage => PageNumber > 1;
+
+        public bool HasNextPage => PageNumber < TotalPages;
     }
 }

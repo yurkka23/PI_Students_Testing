@@ -1,8 +1,9 @@
-﻿namespace EduHub.Domain.Enums;
-
-public enum QuestionType
+﻿namespace EduHub.Domain.Enums
 {
-    ChooseOneAnswer = 0,
-    ChooseMultiAnswers = 1,
-    WriteAnswer = 2
+    public enum QuestionType
+    {
+        OneAnswer = 0,
+        MultiAnswers = 1,
+        WriteAnswer = 2
+    }
 }

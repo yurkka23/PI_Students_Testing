@@ -28,10 +28,10 @@ public class RegisterModel
     [DataType(DataType.Password)]
     [Display(Name = "Password")]
     public string Password { get; set; }
+
     [Required]
     [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
     [DataType(DataType.Password)]
     [Display(Name = "Confirm Password")]
     public string PasswordConfirm { get; set; }
-
 }

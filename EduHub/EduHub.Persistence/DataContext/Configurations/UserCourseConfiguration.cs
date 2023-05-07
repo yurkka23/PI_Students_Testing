@@ -1,27 +1,26 @@
-﻿
-
-using EduHub.Domain.Entities;
+﻿using EduHub.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EduHub.Persistence.DataContext.Configurations;
-
-public class UserCourseConfiguration : IEntityTypeConfiguration<UserCourse>
+namespace EduHub.Persistence.DataContext.Configurations
 {
-    public void Configure(EntityTypeBuilder<UserCourse> builder)
+    public class UserCourseConfiguration : IEntityTypeConfiguration<UserCourse>
     {
-        builder.HasKey(x => new { x.StudentId, x.CourseId });
+        public void Configure(EntityTypeBuilder<UserCourse> builder)
+        {
+            builder.HasKey(x => new { x.StudentId, x.CourseId });
 
-        builder.HasOne(x => x.Student)
-            .WithMany(x => x.StudentsCourses)
-            .HasForeignKey(x => x.StudentId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(x => x.Student)
+                .WithMany(x => x.StudentsCourses)
+                .HasForeignKey(x => x.StudentId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasOne(x => x.Course)
-            .WithMany(x => x.StudentsCourses)
-            .HasForeignKey(x => x.CourseId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(x => x.Course)
+                .WithMany(x => x.StudentsCourses)
+                .HasForeignKey(x => x.CourseId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }

@@ -1,6 +1,9 @@
-﻿namespace EduHub.Domain.Exceptions;
-
-public class BadRequestException : Exception
+﻿namespace EduHub.Domain.Exceptions
 {
-    public BadRequestException(string message) : base($"{message} (bad request)") { }
+    public class BadRequestException : Exception
+    {
+        public BadRequestException(string message) : base($"{message} (bad request)")
+        {
+        }
+    }
 }

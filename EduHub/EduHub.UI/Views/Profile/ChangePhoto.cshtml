@@ -5,21 +5,23 @@
     <table class="table">
         <tr>
             <td>
-                @if (@Model.UserImgUrl != null)
-                 {
-                     <img style='width: 30%; height: auto;' src="@Model.UserImgUrl" />
-                 }
-                 else
-                 {
-                    <img style='width: 30%; height: auto;' src="https://localhost:7056/AppFiles/images/base-user-icon.jpg" />
-                 }
+                @if (Model.UserImgUrl != null)
+                {
+                    <img style='width: 30%; height: auto;' src="@Model.UserImgUrl"/>
+                }
+                else
+                {
+                    <img style='width: 30%; height: auto;' src="https://localhost:7056/AppFiles/images/base-user-icon.jpg"/>
+                }
             </td>
         </tr>
         <tr>
             <td>
                 <div>
-                    <h6> <label asp-for="NewProfileImage">Add New profile image</label></h6>
-                    <input asp-for="NewProfileImage" class="btn btn-secondary" />
+                    <h6>
+                        <label asp-for="NewProfileImage">Add New profile image</label>
+                    </h6>
+                    <input asp-for="NewProfileImage" class="btn btn-secondary"/>
                     <span asp-validation-for="NewProfileImage"></span>
                 </div>
             </td>
@@ -30,13 +32,8 @@
                 <p>
                     <input type="submit" value="Change Photo" class="btn btn-success"/>
                 </p>
-                 <button asp-controller="Profile" asp-action="MyProfile"  class="btn btn-dark">Back</button>
+                <button asp-controller="Profile" asp-action="MyProfile" class="btn btn-dark">Back</button>
             </td>
         </tr>
     </table>
 </form>
-
-
-
-
-   

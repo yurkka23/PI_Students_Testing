@@ -3,6 +3,7 @@ using EduHub.Application.Mapper;
 using EduHub.Application.Services;
 using EduHub.Domain.Entities;
 using EduHub.Domain.Settings;
+using EduHub.Integration.Bootstrap;
 using EduHub.Persistence.Abstractions;
 using EduHub.Persistence.DataContext;
 using EduHub.Persistence.Realizations;
@@ -20,30 +21,42 @@ var connectionString = builder.Configuration.GetConnectionString("DataConnection
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddIdentity<User, AppRole>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 4;
-}).AddEntityFrameworkStores<ApplicationDbContext>()
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 4;
+    }).AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+// Settings
 builder.Services.Configure<HostSettings>(builder.Configuration.GetSection("HostSettings"));
 
+// SendGrid
+var sendGridSettings = new SendGridSettings();
+builder.Configuration.GetSection("SendGridSettings").Bind(sendGridSettings);
+builder.Services.AddScoped<SendGridSettings>(_ => sendGridSettings);
+
+
+// Services
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<ITestService, TestService>();
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.RegisterIntegration();
+
 
 builder.Services.AddMvc(option => option.EnableEndpointRouting = false);
 
 // Logger
-string outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm: ss.fff} [{Level}] {Message}{NewLine}{Exception}";
+var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm: ss.fff} [{Level}] {Message}{NewLine}{Exception}";
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
     .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
@@ -69,7 +82,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions()
+app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"AppFiles")),
     RequestPath = new PathString("/AppFiles")
@@ -80,7 +93,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

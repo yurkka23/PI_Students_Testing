@@ -2,15 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EduHub.Persistence.DataContext.Configurations;
-
-public class AnswerOptionsConfiguration : IEntityTypeConfiguration<AnswerOption>
+namespace EduHub.Persistence.DataContext.Configurations
 {
-    public void Configure(EntityTypeBuilder<AnswerOption> builder)
+    public class AnswerOptionsConfiguration : IEntityTypeConfiguration<AnswerOption>
     {
-        builder.HasKey(x => x.Id);
-
+        public void Configure(EntityTypeBuilder<AnswerOption> builder)
+        {
+            builder.HasKey(x => x.Id);
+        }
     }
 }
-
-

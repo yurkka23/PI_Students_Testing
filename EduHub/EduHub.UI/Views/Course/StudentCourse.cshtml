@@ -1,0 +1,90 @@
+﻿@using System.Globalization
+@model EduHub.UI.ViewModels.Teacher.CourseVM;
+
+<div class="teachers-courses-wrapper">
+    <div class="courses-sidebar">
+        <h3>My courses</h3>
+        @foreach (var course in Model.Courses)
+        {
+            if(Model.Course?.Id == course.Id)
+            {
+                 <a class="side-title-course active-link-sidebar" asp-controller="Course" asp-action="StudentCourse" asp-route-id="@course.Id">
+                    <i class="bi bi-chevron-right"></i>@course.Name
+                </a>
+            }
+            else
+            {
+                <a class="side-title-course" asp-controller="Course" asp-action="StudentCourse" asp-route-id="@course.Id">
+                    <i class="bi bi-chevron-right"></i>@course.Name
+                </a>
+            }
+        }
+
+    </div>
+
+    <div class="content p-4">
+        <h4>Course name: @Model.Course?.Name</h4>
+        <div>Description: @Model.Course?.Description</div>
+        <h5>Teacher: @Model.Course?.Teacher?.FirstName  @Model.Course?.Teacher?.LastName</h5>
+
+        <div>Created at: @Model.Course?.CreatedAt.ToString("dd/MM yyyy")</div>
+
+
+
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="ShowModal()">
+            Leave course
+        </button>
+
+        <h5>Course Test: </h5>
+
+        @foreach (var test in Model.Course?.Tests)
+        {
+            <div class="card w-100 m-1">
+                <div class="card-body">
+                    <h5 class="card-title">@test.Name</h5>
+                    <p class="card-text">Description: @test.Description</p>
+                    <div class="card-text">Start at: @test.StartTime.ToString("G",CultureInfo.GetCultureInfo("de-DE"))</div>
+                    <div class="card-text">End at: @test.EndTime.ToString("G",CultureInfo.GetCultureInfo("de-DE"))</div>
+                    <div class="card-text">Duration: @test.DurationMinutes</div>
+                    <div class="card-text">Count questions: @test?.Questions?.Count()</div>
+
+                    <a class="btn btn-primary"  asp-controller="Test" asp-action="StartTest" asp-route-testId="@test?.Id" asp-route-courseId=" @Model.Course?.Id">Start now</a>
+                </div>
+            </div>
+        }
+     </div>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Leave course @Model.Course?.Name</h5>
+            </div>
+            <div class="modal-body">
+                Are you sure ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CloseModal()">Close</button>
+                <a class="btn btn-danger" asp-controller="Course" asp-action="LeaveCourse" asp-route-id=" @Model.Course?.Id">Leave</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    //deleteModal course
+    function ShowModal() {
+        $("#deleteModal").modal('show');
+    }
+    function CloseModal() {
+        $("#deleteModal").modal('hide');
+    }
+
+  
+</script>

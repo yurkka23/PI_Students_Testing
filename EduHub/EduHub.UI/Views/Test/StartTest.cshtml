@@ -1,0 +1,84 @@
+﻿@model EduHub.Application.DTOs.Test.PassingTestDTO;
+@using EduHub.Domain.Enums;
+<div class="start-test-wrapper m-5">
+     @{int temp = 0;}
+     @{int indexCurentQuestio = 0;}
+    <div class="side-test">
+        <div class="timer">
+            <div>Timer</div>
+        </div>
+        <div class="nav-questions">
+           
+        @for(var i = 0; i < Model?.Questions?.Count(); i++)
+        {
+
+            if(Model.Questions.ToArray()[i].Id == Model.CurrentQuestion?.Id)
+            {
+                 <a class="active-link-question">
+                   @(temp =i + 1)
+                   @{indexCurentQuestio = i;}
+                </a>
+            }
+            else
+            {
+                <a class="side-question-nav" asp-controller="Test" asp-action="QuestionTest" asp-route-questionId="@Model.Questions.ToArray()[i].Id" asp-route-testId="@Model?.CurrentQuestion?.TestId"> 
+                    @(temp =i + 1)
+                </a>
+            }
+        }
+        </div>
+    </div>
+    <div class="content-question">
+        <h3>@Model?.CurrentQuestion?.QuestionContent</h3>
+        <h6>Points: @Model?.CurrentQuestion?.Points</h6>
+        <div class="answers">
+            @if (Model?.CurrentQuestion?.Type == QuestionType.OneAnswer)
+            {
+                <h3>Chose one Answer:</h3>
+                <div class="oneAnswer">
+                @foreach(var answer in Model?.CurrentQuestion?.Answers)
+                {
+                    <div class="one">
+                         <input type="radio" id="@answer.Content" name="one" value="@answer.Content">
+                         <label for="@answer.Content">@answer.Content</label>
+                    </div>
+                }
+                </div>
+            }
+            @if (Model?.CurrentQuestion?.Type == QuestionType.MultiAnswers)
+            {
+                <h3>Chose multiple Answers:</h3>
+                <div class="multipleAnswers">
+                @foreach(var answer in Model?.CurrentQuestion?.Answers)
+                {
+                   <div class="multi">
+                        <input type="checkbox" id="@answer.Content" name="@answer.Content" value="@answer.Content">
+                        <label for="@answer.Content">@answer.Content</label>
+                   </div>
+                }
+                </div>
+            }
+            @if (Model?.CurrentQuestion?.Type == QuestionType.WriteAnswer)
+            {
+                <h3>Your Answer:</h3>
+                <input class="rounded width-30vw">
+            }
+        </div>
+        <div class="test-buttons d-flex gap-4">
+            @if(Model.Questions.ToArray()[0].Id != Model.CurrentQuestion?.Id)
+            {
+               <a class="btn btn-primary" asp-controller="Test" asp-action="QuestionTest" asp-route-questionId="@Model.Questions.ToArray()[indexCurentQuestio-1].Id" asp-route-testId="@Model?.CurrentQuestion?.TestId">Back</a>
+
+            }
+            @if(Model.Questions.ToArray()[Model.Questions.ToArray().Count()-1].Id != Model.CurrentQuestion?.Id)
+            {
+               <a class="btn btn-primary" asp-controller="Test" asp-action="QuestionTest" asp-route-questionId="@Model.Questions.ToArray()[indexCurentQuestio+1].Id" asp-route-testId="@Model?.CurrentQuestion?.TestId">Next</a>
+            }
+            @if(Model.Questions.ToArray()[Model.Questions.ToArray().Count()-1].Id == Model.CurrentQuestion?.Id)
+            {
+               <a class="btn btn-success" asp-controller="Test" asp-action="Finish" asp-route-testId="@Model?.CurrentQuestion?.TestId">Finish</a>
+            }
+
+        </div>
+    </div>
+</div>

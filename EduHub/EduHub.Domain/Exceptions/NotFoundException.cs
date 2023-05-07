@@ -1,5 +1,9 @@
-﻿namespace EduHub.Domain.Exceptions;
-public class NotFoundException : Exception
+﻿namespace EduHub.Domain.Exceptions
 {
-    public NotFoundException(string entity) : base($"{entity} not found.") { }
+    public class NotFoundException : Exception
+    {
+        public NotFoundException(string entity) : base($"{entity} not found.")
+        {
+        }
+    }
 }

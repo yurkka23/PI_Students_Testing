@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
-namespace EduHub.Application.Models.Profile;
-
-public class ChangePhotoModel
+namespace EduHub.Application.Models.Profile
 {
-    [Required]
-    public IFormFile NewProfileImage { get; set; }
+    public class ChangePhotoModel
+    {
+        [Required] public IFormFile NewProfileImage { get; set; }
 
-    public string? UserImgUrl { get; set; }
+        public string? UserImgUrl { get; set; }
+    }
 }

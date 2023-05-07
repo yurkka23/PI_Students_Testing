@@ -90,22 +90,22 @@ namespace EduHub.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("df1abc04-667e-4af2-a7d9-2e11dacde13d"),
-                            ConcurrencyStamp = "34c8ddb1-4730-4f8c-b760-5e949deae147",
+                            Id = new Guid("5afdd513-e261-43e8-ad19-300500dcd8dd"),
+                            ConcurrencyStamp = "303f0b90-ce58-4caa-a257-7e3c797d274d",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("80bc0e7b-8c35-4c9d-98e5-41b4a9e6c353"),
-                            ConcurrencyStamp = "836decb0-7fa4-401d-a6ed-3138018dd43b",
+                            Id = new Guid("c7f02517-5a13-4e5d-a744-312efb666519"),
+                            ConcurrencyStamp = "d5a6ea1b-ec36-42d5-9f25-9783c09c8fbd",
                             Name = "student",
                             NormalizedName = "STUDENT"
                         },
                         new
                         {
-                            Id = new Guid("543e8ff1-156e-4159-8511-1b0114368941"),
-                            ConcurrencyStamp = "4b7bc153-2842-49d3-a1fe-8145bcb6826d",
+                            Id = new Guid("2c02beee-60fa-41f7-baaa-3a99c98ec8ad"),
+                            ConcurrencyStamp = "30d382fd-8633-4938-a453-8b3e8f5405d9",
                             Name = "teacher",
                             NormalizedName = "TEACHER"
                         });
@@ -150,6 +150,41 @@ namespace EduHub.Persistence.Migrations
                     b.ToTable("Course");
                 });
 
+            modelBuilder.Entity("EduHub.Domain.Entities.PassingTest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("StudentFinishedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("StudentStartedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("TestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PassingTests");
+                });
+
             modelBuilder.Entity("EduHub.Domain.Entities.Question", b =>
                 {
                     b.Property<Guid>("Id")
@@ -191,6 +226,40 @@ namespace EduHub.Persistence.Migrations
                     b.ToTable("Questions");
                 });
 
+            modelBuilder.Entity("EduHub.Domain.Entities.QuestionAnswer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AnswerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PassingTestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PassingTestId");
+
+                    b.ToTable("QuestionAnswers");
+                });
+
             modelBuilder.Entity("EduHub.Domain.Entities.TeacherRequest", b =>
                 {
                     b.Property<Guid>("Id")
@@ -226,7 +295,7 @@ namespace EduHub.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("teacherRequests");
+                    b.ToTable("TeacherRequests");
                 });
 
             modelBuilder.Entity("EduHub.Domain.Entities.Test", b =>
@@ -387,6 +456,12 @@ namespace EduHub.Persistence.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid?>("VerificationCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("VerificationExpires")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -570,6 +645,17 @@ namespace EduHub.Persistence.Migrations
                     b.Navigation("Test");
                 });
 
+            modelBuilder.Entity("EduHub.Domain.Entities.QuestionAnswer", b =>
+                {
+                    b.HasOne("EduHub.Domain.Entities.PassingTest", "PassingTest")
+                        .WithMany("QuestionsAnswers")
+                        .HasForeignKey("PassingTestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PassingTest");
+                });
+
             modelBuilder.Entity("EduHub.Domain.Entities.Test", b =>
                 {
                     b.HasOne("EduHub.Domain.Entities.Course", "Course")
@@ -688,6 +774,11 @@ namespace EduHub.Persistence.Migrations
                     b.Navigation("StudentsCourses");
 
                     b.Navigation("Tests");
+                });
+
+            modelBuilder.Entity("EduHub.Domain.Entities.PassingTest", b =>
+                {
+                    b.Navigation("QuestionsAnswers");
                 });
 
             modelBuilder.Entity("EduHub.Domain.Entities.Question", b =>

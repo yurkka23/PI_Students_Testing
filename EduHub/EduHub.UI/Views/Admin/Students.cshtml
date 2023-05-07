@@ -1,68 +1,62 @@
-﻿@using System.Collections
-@using Microsoft.AspNetCore.Identity
-@using EduHub.Application.DTOs.User
-@using EduHub.Domain.Entities
-@inject SignInManager<User> _signInManager
+﻿@inject SignInManager<User> _signInManager
 
-@model EduHub.Application.Models.PaginatedList.PaginatedListModel<UserDTO>;
- 
+@using EduHub.Domain.Entities
+@using Microsoft.AspNetCore.Identity
+@model EduHub.Application.Models.PaginatedList.PaginatedListModel<EduHub.Application.DTOs.User.UserDTO>;
+
 <h3>Students:</h3>
 
 <form asp-action="Students" method="post" class="form-group d-flex gap-4">
-    <input type="text" name="search" value="@ViewData["CurrentFilter"]" class="form-control w-25" />
-    <input type="submit" value="Search" class="btn btn-primary" /> 
-    <a asp-action="Students" class="btn btn-outline-dark">Back to Full List</a>             
-</form>  
+    <input type="text" name="search" value="@ViewData["CurrentFilter"]" class="form-control w-25"/>
+    <input type="submit" value="Search" class="btn btn-primary"/>
+    <a asp-action="Students" class="btn btn-outline-dark">Back to Full List</a>
+</form>
 
 <div class="d-flex justify-content-around flex-wrap">
- @foreach (var student in Model.Items)
- {
-     <div class="card m-4" style="width: 18rem;">
-          @if (@student.UserImgUrl != null)
-          {
-               <img class="card-img-top" style='width: 18rem; height: 14rem;  object-fit: cover' src="@student.UserImgUrl" />
-          }
-          else
-          {
-                <img class="card-img-top" style='width: 18rem; height: 14rem; object-fit: cover' src="https://localhost:7056/AppFiles/images/base-user-icon.jpg" />
-          }
-        <div class="card-body">
-            <h6 class="card-title">@student.UserName</h6>
-            <h5 class="card-title">@student.FirstName @student.LastName</h5>
-            <p class="card-text" >@student.Email</p>
+    @foreach (var student in Model.Items)
+    {
+        <div class="card m-4" style="width: 18rem;">
+            @if (student.UserImgUrl != null)
+            {
+                <img class="card-img-top" style='width: 18rem; height: 14rem;  object-fit: cover' src="@student.UserImgUrl" alt="img"/>
+            }
+            else
+            {
+                <img class="card-img-top" style='width: 18rem; height: 14rem; object-fit: cover' src="https://localhost:7056/AppFiles/images/base-user-icon.jpg" alt="img"/>
+            }
+            <div class="card-body">
+                <h6 class="card-title">@student.UserName</h6>
+                <h5 class="card-title">@student.FirstName @student.LastName</h5>
+                <p class="card-text">@student.Email</p>
 
-            <p class="card-text" style='height: 100px;  overflow: auto'>@student.AboutMe</p>
-            <p class="card-text">Register at: @student.RegisterTime.ToString("dd/MM yyyy")</p>
+                <p class="card-text" style='height: 100px;  overflow: auto'>@student.AboutMe</p>
+                <p class="card-text">Register at: @student.RegisterTime.ToString("dd/MM yyyy")</p>
 
-            <a asp-controller="Admin" asp-action="ShowMoreInfo" asp-route-id=" @student.Id" class="btn btn-primary">Show more info</a>
-             <a asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@student.Id" class="btn btn-danger">Delete user</a>
+                <a asp-controller="Admin" asp-action="ShowMoreInfo" asp-route-id=" @student.Id" class="btn btn-primary">Show more info</a>
+                <a asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@student.Id" class="btn btn-danger">Delete user</a>
+            </div>
         </div>
-    </div>
- }
+    }
 
- </div>     
+</div>
 
- <div class="w-100 d-flex justify-content-center">
-@if (Model.HasPreviousPage)
-{
-<a asp-action="Students"
-   asp-route-pageNum="@(Model.PageNumber - 1)"
-   class="btn btn-outline-dark">
-    <i class="glyphicon glyphicon-chevron-left"></i>
-    Previous
-</a>
-}
-@if (Model.HasNextPage)
-{
-<a asp-action="Students"
-   asp-route-pageNum="@(Model.PageNumber + 1)"
-   class="btn btn-outline-dark">
-    Next
-    <i class="glyphicon glyphicon-chevron-right"></i>
-</a>
- }
- </div>
-
-
- 
-
+<div class="w-100 d-flex justify-content-center">
+    @if (Model.HasPreviousPage)
+    {
+        <a asp-action="Students"
+           asp-route-pageNum="@(Model.PageNumber - 1)"
+           class="btn btn-outline-dark">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Previous
+        </a>
+    }
+    @if (Model.HasNextPage)
+    {
+        <a asp-action="Students"
+           asp-route-pageNum="@(Model.PageNumber + 1)"
+           class="btn btn-outline-dark">
+            Next
+            <i class="glyphicon glyphicon-chevron-right"></i>
+        </a>
+    }
+</div>

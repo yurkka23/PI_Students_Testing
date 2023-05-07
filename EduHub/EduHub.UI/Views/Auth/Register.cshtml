@@ -2,37 +2,39 @@
 
 <form method="post" asp-controller="Auth" asp-action="Register" class="d-flex flex-column align-items-center">
     <div class="d-flex flex-column align-items-start width-30vw">
-        <h2 class="logo align-self-center"><span class="logo-fg">Edu</span><span class="logo-bg">HUB</span></h2>
+        <h2 class="logo align-self-center">
+            <span class="logo-fg">Edu</span><span class="logo-bg">HUB</span>
+        </h2>
         <h4>Sign Up</h4>
 
         <div>
-            <label asp-for="UserName" class="text-secondary fs-6">UserName</label><br />
-            <input asp-for="UserName"  class="rounded width-30vw"/>
+            <label asp-for="UserName" class="text-secondary fs-6">UserName</label><br/>
+            <input asp-for="UserName" class="rounded width-30vw"/>
             <span asp-validation-for="UserName" class="text-danger fs-6"></span>
         </div>
         <div>
-            <label asp-for="Email" class="text-secondary fs-6">E-mail</label><br />
-            <input asp-for="Email"  class="rounded width-30vw"/>
+            <label asp-for="Email" class="text-secondary fs-6">E-mail</label><br/>
+            <input asp-for="Email" class="rounded width-30vw"/>
             <span asp-validation-for="Email" class="text-danger fs-6"></span>
         </div>
         <div>
-            <label asp-for="FirstName" class="text-secondary fs-6">FirstName</label><br />
-            <input asp-for="FirstName"  class="rounded width-30vw"/>
+            <label asp-for="FirstName" class="text-secondary fs-6">FirstName</label><br/>
+            <input asp-for="FirstName" class="rounded width-30vw"/>
             <span asp-validation-for="FirstName" class="text-danger fs-6"></span>
         </div>
         <div>
-            <label asp-for="LastName" class="text-secondary fs-6">LastName</label><br />
-            <input asp-for="LastName"  class="rounded width-30vw"/>
+            <label asp-for="LastName" class="text-secondary fs-6">LastName</label><br/>
+            <input asp-for="LastName" class="rounded width-30vw"/>
             <span asp-validation-for="LastName" class="text-danger fs-6"></span>
         </div>
         <div>
-            <label asp-for="Password" class="text-secondary fs-6">Password</label><br />
-            <input asp-for="Password"  class="rounded width-30vw" type="password"/>
+            <label asp-for="Password" class="text-secondary fs-6">Password</label><br/>
+            <input asp-for="Password" class="rounded width-30vw" type="password"/>
             <span asp-validation-for="Password" class="text-danger fs-6"></span>
         </div>
         <div>
-            <label asp-for="PasswordConfirm" class="text-secondary fs-6">Password Confirm</label><br />
-            <input asp-for="PasswordConfirm"  class="rounded width-30vw" type="password"/>
+            <label asp-for="PasswordConfirm" class="text-secondary fs-6">Password Confirm</label><br/>
+            <input asp-for="PasswordConfirm" class="rounded width-30vw" type="password"/>
             <span asp-validation-for="PasswordConfirm" class="text-danger fs-6"></span>
         </div>
         <div asp-validation-summary="ModelOnly" class="text-danger fs-6"></div>

@@ -1,0 +1,92 @@
+﻿@using System.Globalization
+@model EduHub.UI.ViewModels.Teacher.CourseVM;
+
+<div class="teachers-courses-wrapper">
+    <div class="courses-sidebar">
+        <h3>My courses</h3>
+        <a class="add-course" method="post" asp-controller="Course" asp-action="AddCourse"><i class="bi bi-plus-circle"></i> Add course</a>
+        @foreach (var course in Model.Courses)
+        {
+            if(Model.Course?.Id == course.Id)
+            {
+                 <a class="side-title-course active-link-sidebar" asp-controller="Course" asp-action="Course" asp-route-id="@course.Id">
+                    <i class="bi bi-chevron-right"></i>@course.Name
+                </a>
+            }
+            else
+            {
+                <a class="side-title-course" asp-controller="Course" asp-action="Course" asp-route-id="@course.Id">
+                    <i class="bi bi-chevron-right"></i>@course.Name
+                </a>
+            }
+        }
+
+    </div>
+
+    <div class="content p-4">
+        <h4>Course name: @Model.Course?.Name</h4>
+        <div>Description: @Model.Course?.Description</div>
+        <div>Created at: @Model.Course?.CreatedAt.ToString("dd/MM yyyy")</div>
+
+        <a asp-controller="Course" asp-action="EditCourse" asp-route-id=" @Model.Course?.Id" class="btn btn-secondary">Edit course</a>
+
+
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="ShowModal()">
+            Delete course
+        </button>
+
+        <h5>Course Test: </h5>
+         <a asp-controller="Test" asp-action="AddTest" asp-route-id="@Model.Course?.Id" class="btn btn-secondary"><i class="bi bi-plus-circle"></i>  Add test</a>
+
+        @foreach (var test in Model.Course?.Tests)
+        {
+            <div class="card w-100 m-1">
+                <div class="card-body">
+                    <h5 class="card-title">@test.Name</h5>
+                    <p class="card-text">Description: @test.Description</p>
+                    <div class="card-text">Start at: @test.StartTime.ToString("G",CultureInfo.GetCultureInfo("de-DE"))</div>
+                    <div class="card-text">End at: @test.EndTime.ToString("G",CultureInfo.GetCultureInfo("de-DE"))</div>
+                    <div class="card-text">Duration: @test.DurationMinutes</div>
+                    <div class="d-flex gap-4">
+                        <a class="btn btn-primary"  asp-controller="Test" asp-action="Test" asp-route-id=" @test.Id" >Show more</a>
+                        <a class="btn btn-danger" asp-controller="Test" asp-action="DeleteTest" asp-route-id=" @test.Id" asp-route-courseId="@Model.Course.Id" >Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+     </div>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete course @Model.Course?.Name</h5>
+            </div>
+            <div class="modal-body">
+                Are you sure ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="CloseModal()">Close</button>
+                <a class="btn btn-danger" asp-controller="Course" asp-action="DeleteCourse" asp-route-id=" @Model.Course?.Id">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    //deleteModal course
+    function ShowModal() {
+        $("#deleteModal").modal('show');
+    }
+    function CloseModal() {
+        $("#deleteModal").modal('hide');
+    }
+
+  
+</script>

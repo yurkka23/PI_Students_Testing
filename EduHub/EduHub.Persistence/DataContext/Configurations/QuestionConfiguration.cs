@@ -2,20 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EduHub.Persistence.DataContext.Configurations;
-
-public class QuestionConfiguration : IEntityTypeConfiguration<Question>
+namespace EduHub.Persistence.DataContext.Configurations
 {
-    public void Configure(EntityTypeBuilder<Question> builder)
+    public class QuestionConfiguration : IEntityTypeConfiguration<Question>
     {
-        builder.HasKey(x => x.Id);
+        public void Configure(EntityTypeBuilder<Question> builder)
+        {
+            builder.HasKey(x => x.Id);
 
-        builder.HasMany(ur => ur.Answers)
-            .WithOne(u => u.Question)
-            .HasForeignKey(ur => ur.QuestionId)
-            .IsRequired(false)
-            .IsRequired();
+            builder.HasMany(ur => ur.Answers)
+                .WithOne(u => u.Question)
+                .HasForeignKey(ur => ur.QuestionId)
+                .IsRequired(false)
+                .IsRequired();
+        }
     }
 }
-
-

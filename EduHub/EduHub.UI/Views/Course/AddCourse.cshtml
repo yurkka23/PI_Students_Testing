@@ -1,0 +1,49 @@
+﻿@model EduHub.UI.ViewModels.CreateCourseVM;
+
+
+<div class="teachers-courses-wrapper">
+    <div class="courses-sidebar">
+        <h3>My courses</h3>
+        <a class="add-course active-link-sidebar" method="post" asp-controller="Course" asp-action="AddCourse"><i class="bi bi-plus-circle"></i> Add course</a>
+        @foreach (var course in Model.Courses)
+        {
+            <a class="side-title-course" asp-controller="Course" asp-action="Course" asp-route-id="@course.Id" class="btn btn-danger">
+                <i class="bi bi-chevron-right"></i>@course.Name
+            </a>
+        }
+
+    </div>
+
+    <div class="content">
+       
+<form method="post" asp-controller="Course" asp-action="AddCourse" class="d-flex flex-column align-items-center">
+    <div class="d-flex flex-column align-items-start width-30vw p-4">
+        <h4> Create course</h4>
+
+        <div>
+            <label asp-for="CreateCourse.Name" class="text-secondary fs-6">Name</label><br/>
+            <input asp-for="CreateCourse.Name" class="rounded width-30vw"/>
+            <span asp-validation-for="CreateCourse.Name" class="text-danger fs-6"></span>
+        </div>
+        <div>
+            <label asp-for="CreateCourse.Description" class="text-secondary fs-6">Description</label><br/>
+            <input asp-for="CreateCourse.Description" class="rounded width-30vw"/>
+            <span asp-validation-for="CreateCourse.Description" class="text-danger fs-6"></span>
+        </div>
+        <div>
+            <label asp-for="CreateCourse.Password" class="text-secondary fs-6">Password</label><br/>
+            <input asp-for="CreateCourse.Password" class="rounded width-30vw"/>
+            <span asp-validation-for="CreateCourse.Password" class="text-danger fs-6"></span>
+        </div>
+        <br/>
+
+        <div class="align-self-center mb-2">
+            <input type="submit" value="Create" class="btn btn-dark align-self-center px-5 rounded-sm text-center"/>
+        </div>
+    </div>
+</form>
+          
+     </div>
+
+</div>
+

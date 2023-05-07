@@ -1,0 +1,15 @@
+﻿@model IEnumerable<EduHub.Application.DTOs.Course.CourseDTO>;     
+
+<div class="teachers-courses-wrapper">
+    <div class="courses-sidebar">
+        <h3>My courses</h3>
+        @foreach (var course in Model)
+        {
+            <a class="side-title-course" asp-controller="Course" asp-action="StudentCourse" asp-route-id="@course.Id" class="btn btn-danger">
+                <i class="bi bi-chevron-right"></i>@course.Name
+            </a>
+        }
+
+    </div>
+
+</div>

@@ -2,25 +2,25 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EduHub.Persistence.DataContext.Configurations;
-
-public class TestConfiguration : IEntityTypeConfiguration<Test>
+namespace EduHub.Persistence.DataContext.Configurations
 {
-    public void Configure(EntityTypeBuilder<Test> builder)
+    public class TestConfiguration : IEntityTypeConfiguration<Test>
     {
-        builder.HasKey(x => x.Id);
+        public void Configure(EntityTypeBuilder<Test> builder)
+        {
+            builder.HasKey(x => x.Id);
 
-        builder.HasMany(ur => ur.TestResults)
-            .WithOne(u => u.Test)
-            .HasForeignKey(ur => ur.TestId)
-            .IsRequired(false)
-            .IsRequired();
+            builder.HasMany(ur => ur.TestResults)
+                .WithOne(u => u.Test)
+                .HasForeignKey(ur => ur.TestId)
+                .IsRequired(false)
+                .IsRequired();
 
-        builder.HasMany(x => x.Questions)
-           .WithOne(x => x.Test)
-           .HasForeignKey(x => x.TestId)
-            .IsRequired(false)
-           .OnDelete(DeleteBehavior.NoAction);
+            builder.HasMany(x => x.Questions)
+                .WithOne(x => x.Test)
+                .HasForeignKey(x => x.TestId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }
-
