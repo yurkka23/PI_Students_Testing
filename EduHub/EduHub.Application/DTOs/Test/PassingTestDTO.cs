@@ -17,6 +17,8 @@ public class PassingTestDTO : BaseDTO
     public DateTimeOffset? StudentStartedAt { get; set; }
     public DateTimeOffset? StudentFinishedAt { get; set; }
     public QuestionDTO? CurrentQuestion { get; set; }
+    public string? AnswerOne { get; set; }
+    public string[]? AnswerMulti { get; set; } 
 
     public ICollection<QuestionDTO>? Questions { get; set; }
 }

@@ -47,8 +47,14 @@
                     <div class="card-text">End at: @test.EndTime.ToString("G",CultureInfo.GetCultureInfo("de-DE"))</div>
                     <div class="card-text">Duration: @test.DurationMinutes</div>
                     <div class="card-text">Count questions: @test?.Questions?.Count()</div>
-
-                    <a class="btn btn-primary"  asp-controller="Test" asp-action="StartTest" asp-route-testId="@test?.Id" asp-route-courseId=" @Model.Course?.Id">Start now</a>
+                    @if(Model.TestResults.Select(x => x.Test?.Id).Contains(test?.Id))
+                    {
+                          <a class="btn btn-primary"  asp-controller="Test" asp-action="TestResult" asp-route-testId="@test?.Id">Show Result</a>
+                    }
+                    else
+                    {
+                          <a class="btn btn-primary"  asp-controller="Test" asp-action="StartTest" asp-route-testId="@test?.Id" asp-route-courseId=" @Model.Course?.Id">Start now</a>
+                    }
                 </div>
             </div>
         }

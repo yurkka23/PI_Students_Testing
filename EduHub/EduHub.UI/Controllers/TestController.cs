@@ -384,6 +384,7 @@ public class TestController : Controller
         try
         {
             var res  = await _testService.StartTest(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), testId);
+            ViewBag.TimeExpire = DateTime.UtcNow.AddMinutes(res.DurationMinutes);
             return View(res);
         }
         catch (Exception ex)
@@ -396,11 +397,12 @@ public class TestController : Controller
     }
 
     [Authorize]
-    public async Task<IActionResult> QuestionTest(Guid testId, Guid questionId)
+    public async Task<IActionResult> QuestionTest(Guid testId, Guid questionId, Guid questionAnswerId, string? answerOne, string? answersMulti, string? answer, double? secondsRemains )
     {
         try
         {
-            var res = await _testService.GetQuestionTest(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), testId, questionId);
+            var res = await _testService.GetQuestionTest(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), testId, questionId, questionAnswerId, answerOne, answersMulti,answer);
+            ViewBag.TimeExpire = DateTime.UtcNow.AddSeconds((double)secondsRemains);
             return View(res);
         }
         catch (Exception ex)
@@ -413,11 +415,11 @@ public class TestController : Controller
     }
 
     [Authorize]
-    public async Task<IActionResult> QuestionTest1(Guid testId, Guid questionId, Guid questionAnswerId, string? answerOne, string? answersMulti, string? answer)
+    public async Task<IActionResult> FinishTest(Guid testId, Guid questionAnswerId, string? answerOne, string? answersMulti, string? answer)
     {
         try
         {
-            var res = await _testService.GetQuestionTest(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), testId, questionId);
+            var res = await _testService.FinishTest(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), testId, questionAnswerId,answerOne, answersMulti,answer);
             return View(res);
         }
         catch (Exception ex)
@@ -425,7 +427,22 @@ public class TestController : Controller
             TempData["error"] = $"Error: {ex.Message}";
             _logger.LogError(ex.Message);
             return RedirectToAction("StudentCourses");
-
+        }
+    }
+    
+    [Authorize]
+    public async Task<IActionResult> TestResult(Guid testId)
+    {
+        try
+        {
+            var res = await _testService.GetTestResultAsync(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value), testId);
+            return View(res);
+        }
+        catch (Exception ex)
+        {
+            TempData["error"] = $"Error: {ex.Message}";
+            _logger.LogError(ex.Message);
+            return RedirectToAction("StudentCourses");
         }
     }
 

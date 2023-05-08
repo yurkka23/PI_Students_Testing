@@ -5,11 +5,15 @@
     @{
         int temp = 0;
         int indexCurentQuestio = 0;
+        var endTime = ((DateTime)ViewBag.TimeExpire);
+        var timeRemaining = (int)TimeSpan.FromTicks(endTime.Ticks - DateTime.UtcNow.Ticks).TotalSeconds;
     }
 
     <div class="side-test">
+        <h4>Test: @Model.Name</h4>
         <div class="timer">
-            <div>Timer</div>
+             <div>Time remaining :  <span id="minRemaining"></span>:<span id="secRemaining"></span> </div>
+
         </div>
         <div class="nav-questions">
            
@@ -25,13 +29,12 @@
             }
             else
             {
-                <a class="side-question-nav" 
-                asp-controller="Test" asp-action="QuestionTest"
-                asp-route-questionId="@Model.Questions.ToArray()[i].Id" 
-                asp-route-testId="@Model?.CurrentQuestion?.TestId"
-                asp-route-answerId=""> 
-                    @(temp =i + 1)
-                </a>
+                <button class="side-question-nav" 
+                onclick="SentQuestionTest('@Model.Questions.ToArray()[i].Id', '@Model?.CurrentQuestion?.TestId', '@Model?.CurrentQuestion?.Id')" >
+                @(temp =i + 1)
+                </button>
+
+               
             }
         }
         </div>
@@ -47,8 +50,16 @@
                 @foreach(var answer in Model?.CurrentQuestion?.Answers)
                 {
                     <div class="one">
-                         <input type="radio" id="@answer.Content" name="one" value="@answer.Content">
-                         <label for="@answer.Content">@answer.Content</label>
+                        @if (Model.AnswerOne != null && answer.Content == Model.AnswerOne)
+                        {
+                            <input type="radio" id="@answer.Content" name="one" value="@answer.Content" checked>
+                            <label for="@answer.Content">@answer.Content</label>
+                        }
+                        else
+                        {
+                             <input type="radio" id="@answer.Content" name="one" value="@answer.Content">
+                             <label for="@answer.Content">@answer.Content</label>
+                        }      
                     </div>
                 }
                 </div>
@@ -60,8 +71,17 @@
                 @foreach(var answer in Model?.CurrentQuestion?.Answers)
                 {
                    <div class="multi">
-                        <input type="checkbox" id="@answer.Content" name="@answer.Content" value="@answer.Content">
-                        <label for="@answer.Content">@answer.Content</label>
+                        @if (Model.AnswerMulti != null && Model.AnswerMulti.Contains(answer.Content))
+                        {
+                            <input type="checkbox" id="@answer.Content" name="@answer.Content" value="@answer.Content" checked>
+                            <label for="@answer.Content">@answer.Content</label>
+                        }
+                        else
+                        {
+                             <input type="checkbox" id="@answer.Content" name="@answer.Content" value="@answer.Content">
+                             <label for="@answer.Content">@answer.Content</label>
+                        }      
+                        
                    </div>
                 }
                 </div>
@@ -69,14 +89,20 @@
             @if (Model?.CurrentQuestion?.Type == QuestionType.WriteAnswer)
             {
                 <h3>Your Answer:</h3>
-                <input id="answerWritten" class="rounded width-30vw">
+                @if (Model.AnswerOne != null)
+                {
+                    <input id="answerWritten" value="@Model.AnswerOne" class="rounded width-30vw">
+                }
+                else
+                {
+                    <input id="answerWritten" class="rounded width-30vw">
+                }
             }
         </div>
         <div class="test-buttons d-flex gap-4">
             @if(Model.Questions.ToArray()[0].Id != Model.CurrentQuestion?.Id)
             {
-               <button class="btn btn-primary" asp-controller="Test" asp-action="QuestionTest" asp-route-questionId="@Model.Questions.ToArray()[indexCurentQuestio-1].Id" asp-route-testId="@Model?.CurrentQuestion?.TestId">Back</button>
-
+               <button class="btn btn-primary" onclick="SentQuestionTest('@Model.Questions.ToArray()[indexCurentQuestio - 1].Id', '@Model?.CurrentQuestion?.TestId', '@Model?.CurrentQuestion?.Id')" >Back</button>
             }
             @if(Model.Questions.ToArray()[Model.Questions.ToArray().Count()-1].Id != Model.CurrentQuestion?.Id)
             {
@@ -86,7 +112,8 @@
             }
             @if(Model.Questions.ToArray()[Model.Questions.ToArray().Count()-1].Id == Model.CurrentQuestion?.Id)
             {
-               <button class="btn btn-success" asp-controller="Test" asp-action="Finish" asp-route-testId="@Model?.CurrentQuestion?.TestId">Finish</button>
+               <button class="btn btn-success" onclick="FinishTest('@Model?.CurrentQuestion?.TestId', '@Model?.CurrentQuestion?.Id')" >Finish</button>
+
             }
 
         </div>
@@ -94,9 +121,74 @@
 </div>
 
 <script>
+     var remSeconds = @timeRemaining;
+    
+    var secondsCounter = remSeconds % 60;
+   
+    function formatNumber(number){
+        if (number < 10) return '0' + number;
+        else return '' + number;
+    }
+
+   function startTick(){
+       document.getElementById('secRemaining').innerHTML = formatNumber(secondsCounter);
+       document.getElementById('minRemaining').innerHTML = formatNumber(parseInt(remSeconds / 60));
+       
+       
+       var _tick = setInterval(function() {
+           if (remSeconds > 0) {
+
+               remSeconds = remSeconds - 1;
+               secondsCounter = secondsCounter - 1;
+               document.getElementById('secRemaining').innerHTML = formatNumber(secondsCounter);
+               document.getElementById('minRemaining').innerHTML = formatNumber(parseInt(remSeconds / 60));
+
+               if (secondsCounter == 0) {
+                   secondsCounter = 60;
+               }
+           }else{
+               this.FinishTest('@Model?.CurrentQuestion?.TestId', '@Model?.CurrentQuestion?.Id')
+               // FinishTest('@Model?.CurrentQuestion?.TestId', '@Model?.CurrentQuestion?.Id')";
+                clearInterval(_tick)
+           }
+
+           }, 1000);
+       
+   }
+   startTick()
+
     function SentQuestionTest(questionId, testId, currentQuestionId){
         var queryParams = "?questionId=" + questionId;
         queryParams += "&testId=" + testId;
+        queryParams += "&secondsRemains=" + remSeconds;
+        queryParams += "&questionAnswerId=" + currentQuestionId;
+            debugger
+            let  answerOneId = document.querySelector('input[type="radio"]:checked')?.value?.toString();
+            if(answerOneId){
+                 queryParams += "&answerOne=" + answerOneId;
+            }
+            
+            let answerStr = document.getElementById("answerWritten")?.value;
+            if(answerStr){
+                queryParams += "&answer=" + answerStr;
+            }
+
+            let answerMultiCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            if(answerMultiCheckboxes?.length > 0){
+                  let answerMultiIds = [];
+    
+                  answerMultiCheckboxes.forEach(function(checkedBox) {
+                        answerMultiIds.push(checkedBox.value);
+                  });
+                  queryParams += "&answersMulti=" + answerMultiIds;
+            }
+           debugger       
+        window.location.href = "/Test/QuestionTest" + queryParams;
+
+    }
+
+    function FinishTest(testId, currentQuestionId){
+        let queryParams = "?testId=" + testId;
         queryParams += "&questionAnswerId=" + currentQuestionId;
             
             let  answerOneId = document.querySelector('input[type="radio"]:checked')?.value?.toString();
@@ -118,12 +210,8 @@
                   });
                   queryParams += "&answersMulti=" + answerMultiIds;
             }
-          
-            debugger
-        
-        window.location.href = "/Test/QuestionTest1" + queryParams;
+                  
+        window.location.href = "/Test/FinishTest" + queryParams;
 
     }
-
-   
 </script>

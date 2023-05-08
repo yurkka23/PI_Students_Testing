@@ -13,14 +13,16 @@ namespace EduHub.UI.Controllers;
 public class CourseController : Controller
 {
     private readonly ICourseService _courseService;
+    private readonly ITestService _testService;
     private readonly ILogger<CourseController> _logger;
     private readonly IMapper _mapper;
 
-    public CourseController(ICourseService courseService, IMapper mapper, ILogger<CourseController> logger)
+    public CourseController(ICourseService courseService, IMapper mapper, ILogger<CourseController> logger, ITestService testService)
     {
         _mapper = mapper;
         _courseService = courseService;
         _logger = logger;
+        _testService = testService;
     }
 
     [Authorize(Roles = RoleConstants.AdminRole + "," + RoleConstants.TeacherRole)]
@@ -217,10 +219,12 @@ public class CourseController : Controller
 
         var courses = await _courseService.GetStudentsCoursesAsync(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
 
+        var testResults = await _testService.GetTestResultsAsync(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
         var vm = new CourseVM()
         {
             Course = course,
-            Courses = courses
+            Courses = courses,
+            TestResults = testResults
         };
 
         return this.View(vm);

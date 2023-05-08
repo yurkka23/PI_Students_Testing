@@ -144,6 +144,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    color: aliceblue;
+    font-weight:600;
 }
 .content-question {
     margin-left: 1rem;

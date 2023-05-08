@@ -1,6 +1,7 @@
 ﻿
 using EduHub.Application.DTOs.Question;
 using EduHub.Application.DTOs.Test;
+using EduHub.Application.DTOs.TestResult;
 using EduHub.Application.Models.Answer;
 using EduHub.Application.Models.Question;
 using EduHub.Application.Models.Test;
@@ -20,6 +21,11 @@ public interface ITestService
     Task<Guid> CreateAnswerAsync(Guid teacherId, AddAnswerModel model);
     Task DeleteAnswerAsync(Guid teacherId, Guid answerId);
     Task<PassingTestDTO> StartTest(Guid studentId, Guid testId);
-    Task<PassingTestDTO> GetQuestionTest(Guid studentId, Guid testId,Guid questionId);
+    Task<PassingTestDTO> GetQuestionTest(Guid studentId, Guid testId,Guid questionId, Guid questionAnswerId, string? answerOne, string? answersMulti, string? answer);
+    Task<TestResultDTO> FinishTest(Guid studentId, Guid testId, Guid questionAnswerId, string? answerOne, string? answersMulti, string? answer);
+    Task<IEnumerable<TestResultDTO>> GetTestResultsAsync(Guid studentId);
+    Task<TestResultDTO> GetTestResultAsync(Guid studentId, Guid testId);
+
+    
 
 }

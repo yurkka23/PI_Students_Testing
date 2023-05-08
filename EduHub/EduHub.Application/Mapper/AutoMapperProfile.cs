@@ -32,8 +32,9 @@ namespace EduHub.Application.Mapper
 
             CreateMap<Test, TestDTO>().ReverseMap();
             CreateMap<TestResult, TestResultDTO>().ReverseMap();
+
+            CreateMap<TestResult, TestResultDTO>().ReverseMap();
             CreateMap<UserDTO, EditProfileModel>().ReverseMap();
-            //.ForMember(s => s.UserImgUrl, s => s.MapFrom(map => map.UserImgUrl == null ? null : HostConstant.CurrentHost + map.UserImgUrl));
             CreateMap<UserDTO, ChangePasswordModel>().ReverseMap();
             CreateMap<UserDTO, ChangePhotoModel>().ReverseMap();
             CreateMap<TeacherRequest, TeacherRequestDTO>()
