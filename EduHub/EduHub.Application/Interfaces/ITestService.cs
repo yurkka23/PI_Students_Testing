@@ -25,7 +25,7 @@ public interface ITestService
     Task<TestResultDTO> FinishTest(Guid studentId, Guid testId, Guid questionAnswerId, string? answerOne, string? answersMulti, string? answer);
     Task<IEnumerable<TestResultDTO>> GetTestResultsAsync(Guid studentId);
     Task<TestResultDTO> GetTestResultAsync(Guid studentId, Guid testId);
+    Task<IEnumerable<TestResultDTO>> GetTestResultsForTeacherAsync(Guid testId);
 
-    
 
 }

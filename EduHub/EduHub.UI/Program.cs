@@ -1,3 +1,4 @@
+using AutoMapper;
 using EduHub.Application.Interfaces;
 using EduHub.Application.Mapper;
 using EduHub.Application.Services;
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
 using Serilog.Events;
+using ServiceStack.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
@@ -31,7 +33,14 @@ builder.Services.AddIdentity<User, AppRole>(options =>
     .AddDefaultTokenProviders();
 
 // Settings
-builder.Services.Configure<HostSettings>(builder.Configuration.GetSection("HostSettings"));
+var hostSettings = new HostSettings();
+builder.Configuration.GetSection("HostSettings").Bind(hostSettings);
+builder.Services.AddScoped<HostSettings>(_ => hostSettings);
+
+//UrlSettings
+var urlSettings = new UrlSettings();
+builder.Configuration.GetSection("UrlSettings").Bind(urlSettings);
+builder.Services.AddScoped<UrlSettings>(_ => urlSettings);
 
 // SendGrid
 var sendGridSettings = new SendGridSettings();
@@ -48,8 +57,14 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<ITestService, TestService>();
 
-
+//mapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new AutoMapperProfile(hostSettings));
+}).CreateMapper());
+
 builder.Services.RegisterIntegration();
 
 
@@ -61,7 +76,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
     .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
     .WriteTo.File("./Logs/EduHub-Logs-.txt", rollingInterval: RollingInterval.Day, outputTemplate: outputTemplate)
-    .WriteTo.Seq("http://localhost:5341")
+    //.WriteTo.Seq("http://localhost:5341")
     .CreateLogger();
 
 builder.Services.AddControllersWithViews();

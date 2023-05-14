@@ -1,19 +1,19 @@
 ﻿@model EduHub.Application.ViewModels.Auth.LoginModel
 
 <form method="post" asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl" class="d-flex flex-column align-items-center">
-    <div class="d-flex flex-column align-items-start width-30vw">
+    <div class="d-flex flex-column align-items-start">
         <h2 class="logo align-self-center">
             <span class="logo-fg">Edu</span><span class="logo-bg">HUB</span>
         </h2>
         <h4>Sign in</h4>
         <div>
             <label asp-for="Email" class="text-secondary fs-6">E-mail</label><br/>
-            <input asp-for="Email" class="rounded width-30vw"/>
+            <input asp-for="Email" class="form-control" style="width:340px" />
             <span asp-validation-for="Email" class="text-danger fs-6"></span>
         </div>
         <div>
             <label asp-for="Password" class="text-secondary fs-6">Password</label><br/>
-            <input asp-for="Password" class="rounded width-30vw" type="password"/>
+            <input asp-for="Password" class="form-control" style="width:340px" type="password"/>
             <span asp-validation-for="Password" class="text-danger fs-6"></span>
         </div>
         <div asp-validation-summary="ModelOnly" class="text-danger fs-6"></div>

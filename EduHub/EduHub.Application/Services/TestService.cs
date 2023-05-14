@@ -216,12 +216,12 @@ public class TestService: ITestService
 
         if (question1.Type == QuestionType.MultiAnswers)
         {
-            res.AnswerMulti = (await _unitOfWork.QuestionAnswers.GetAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == question1.Id))?.Select(x => x?.Answer)?.ToArray();
+            res.AnswerMulti = (await _unitOfWork.QuestionAnswers.GetAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == question1.Id && x.CreatedBy == studentId))?.Select(x => x?.Answer)?.ToArray();
 
         }
         else
         {
-            var answerToResponse = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == question1.Id);
+            var answerToResponse = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == question1.Id && x.CreatedBy == studentId);
             res.AnswerOne = answerToResponse?.Answer;
         }
         return res;
@@ -252,7 +252,7 @@ public class TestService: ITestService
 
         if (currentQuestion.Type == QuestionType.WriteAnswer && answer != null && answer.Trim() != "")
         {
-            var answerWrite = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId);
+            var answerWrite = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId && x.CreatedBy == studentId);
             if(answerWrite is null)
             {
                 var answerWriteEntity = new QuestionAnswer
@@ -272,7 +272,7 @@ public class TestService: ITestService
         }
         if (currentQuestion.Type == QuestionType.OneAnswer && answerOne != null)
         {
-            var answerWrite = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId);
+            var answerWrite = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId && x.CreatedBy == studentId);
             if (answerWrite is null)
             {
                 var answerWriteEntity = new QuestionAnswer
@@ -295,7 +295,7 @@ public class TestService: ITestService
         {
             var arrayAnswers = answersMulti.Split(',');
 
-            var answerWrite = await _unitOfWork.QuestionAnswers.GetAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId);
+            var answerWrite = await _unitOfWork.QuestionAnswers.GetAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId && x.CreatedBy == studentId);
             if (answerWrite is null)
             {
                 foreach(var elAnswer in arrayAnswers)
@@ -335,11 +335,11 @@ public class TestService: ITestService
 
         if(question1.Type == QuestionType.MultiAnswers)
         {
-            res.AnswerMulti = (await _unitOfWork.QuestionAnswers.GetAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == question1.Id))?.Select(x=> x?.Answer)?.ToArray();
+            res.AnswerMulti = (await _unitOfWork.QuestionAnswers.GetAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == question1.Id && x.CreatedBy == studentId))?.Select(x=> x?.Answer)?.ToArray();
         }
         else
         {
-            var answerToResponse = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == question1.Id);
+            var answerToResponse = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == question1.Id && x.CreatedBy == studentId);
             res.AnswerOne = answerToResponse?.Answer;
         }
 
@@ -367,7 +367,7 @@ public class TestService: ITestService
 
         if (currentQuestion.Type == QuestionType.WriteAnswer && answer != null && answer.Trim() != "")
         {
-            var answerWrite = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId);
+            var answerWrite = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId && x.CreatedBy == studentId);
             if (answerWrite is null)
             {
                 var answerWriteEntity = new QuestionAnswer
@@ -387,7 +387,7 @@ public class TestService: ITestService
         }
         if (currentQuestion.Type == QuestionType.OneAnswer && answerOne != null)
         {
-            var answerWrite = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId);
+            var answerWrite = await _unitOfWork.QuestionAnswers.GetFirstOrDefaultAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId && x.CreatedBy == studentId);
             if (answerWrite is null)
             {
                 var answerWriteEntity = new QuestionAnswer
@@ -410,7 +410,7 @@ public class TestService: ITestService
         {
             var arrayAnswers = answersMulti.Split(',');
 
-            var answerWrite = await _unitOfWork.QuestionAnswers.GetAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId);
+            var answerWrite = await _unitOfWork.QuestionAnswers.GetAsync(x => x.PassingTestId == passingTest!.Id && x.QuestionId == questionAnswerId && x.CreatedBy == studentId);
             if (answerWrite is null)
             {
                 foreach (var elAnswer in arrayAnswers)
@@ -536,7 +536,16 @@ public class TestService: ITestService
         res.TotalPoints = totalPoints;
         return res;
     }
+    public async Task<IEnumerable<TestResultDTO>> GetTestResultsForTeacherAsync(Guid testId)
+    {
+        var testResults = await _unitOfWork.TestResults.GetAsync(
+            x => x.TestId == testId,
+            null,
+            x => x.Include(x => x.Test).Include(x => x.Student));
 
+        return _mapper.Map<IEnumerable<TestResultDTO>>(testResults);
+    }
+  
 
 
 }

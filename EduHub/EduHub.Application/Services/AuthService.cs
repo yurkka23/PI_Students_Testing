@@ -4,6 +4,7 @@ using EduHub.Application.ViewModels.Auth;
 using EduHub.Domain.Constants;
 using EduHub.Domain.Entities;
 using EduHub.Domain.Exceptions;
+using EduHub.Domain.Settings;
 using EduHub.Integration.Providers.Abstractions;
 using EduHub.Persistence.Abstractions;
 using Microsoft.AspNetCore.Identity;
@@ -18,14 +19,16 @@ public class AuthService : IAuthService
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly UrlSettings _urlSettings;
     public AuthService(UserManager<User> userManager, SignInManager<User> signInManager,
-        RoleManager<AppRole> roleManager, IEmailProvider emailProvider, IUnitOfWork unitOfWork)
+        RoleManager<AppRole> roleManager, IEmailProvider emailProvider, IUnitOfWork unitOfWork, UrlSettings urlSettings)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
         _emailProvider = emailProvider;
         _unitOfWork = unitOfWork;
+        _urlSettings = urlSettings;
     }
 
     public async Task Login(LoginModel userModel)
@@ -98,7 +101,7 @@ public class AuthService : IAuthService
             throw new BadRequestException(string.Join(", ", errors));
         }
 
-        var uriBuilder = new UriBuilder("https://localhost:7056/Auth/VerifyUser");
+        var uriBuilder = new UriBuilder(_urlSettings.VerifyUserUrl);
         var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
         query["vc"] = verificationCode.ToString();
@@ -169,7 +172,7 @@ public class AuthService : IAuthService
         _unitOfWork.Users.Update(user);
         var res = await _unitOfWork.SaveAsync(user.Id);
 
-        var uriBuilder = new UriBuilder("https://localhost:7056/Auth/ResetForgotPassword");
+        var uriBuilder = new UriBuilder(_urlSettings.ResetPasswordUrl);
         var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
         query["vc"] = verificationCode.ToString();
@@ -217,7 +220,5 @@ public class AuthService : IAuthService
         await _userManager.UpdateAsync(user);
 
     }
-
-
 
 }

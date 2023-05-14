@@ -1,63 +1,41 @@
 ﻿@using EduHub.Domain.Constants
 @model EduHub.Application.DTOs.User.UserDTO;
 
-<table class="table">
-    <tr>
-        <th></th>
-        <th>UserName</th>
-        <th>FirstName</th>
-        <th>LastName</th>
-        <th>Email</th>
-        <th>Registered at</th>
-    </tr>
-    <tr>
-        <td style="width: 5%">
-            @if (Model.UserImgUrl != null)
-            {
-                <img style='width: 200px; height: auto;' src="@Model.UserImgUrl"/>
-            }
-            else
-            {
-                <img style='width: 200px; height: auto;' src="https://localhost:7056/AppFiles/images/base-user-icon.jpg"/>
-            }
-        </td>
-        <td>@Model.UserName</td>
-        <td>@Model.FirstName</td>
-        <td>@Model.LastName</td>
-        <td>@Model.Email</td>
-        <td>@Model.RegisterTime.ToString("dd/MM yyyy")</td>
-    </tr>
-    <tr>
-        <td>
-            <h6> About Me:</h6> @Model.AboutMe
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a asp-controller="Profile" asp-action="EditProfile" class="btn btn-secondary">Edit profile</a>
-        </td>
-        <td>
-            <a asp-controller="Profile" asp-action="ChangePhoto" class="btn btn-secondary">Change Photo</a>
-        </td>
-        <td>
-            <a asp-controller="Profile" asp-action="ChangePassword" class="btn btn-warning">Change Password</a>
-        </td>
-        <td>
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="ShowModal()">
+ <div class="content p-4 m-5">
+         <div class="d-flex g-3 flex-wrap">
+         @if (Model.UserImgUrl != null)
+         {
+             <img style='width: 200px; height: 200px; border-radius: 100%; object-fit: cover;' src="@Model.UserImgUrl"/>
+         }
+         else
+         {
+             <img style='width: 200px; height: 200px; border-radius: 100%; object-fit: cover;' src="https://localhost:7056/AppFiles/images/base-user-icon.jpg"/>
+         }
+         <div class="m-3">
+             <h4>Name: @Model.FirstName @Model.LastName</h4>
+              <h4>Username: @Model.UserName</h4>
+              <h5>Email: @Model.Email</h5>
+              <h6>Registered at: @Model.RegisterTime.ToString("dd/MM yyyy")</h6>
+              <div>About me: @Model.AboutMe</div>    
+         </div>
+         </div>
+        <div class="d-flex gap-2 flex-wrap mt-4">
+<a asp-controller="Profile" asp-action="EditProfile" class="btn btn-success">Edit profile</a>
+<a asp-controller="Profile" asp-action="ChangePhoto" class="btn btn-success">Change Photo</a>
+<a asp-controller="Profile" asp-action="ChangePassword" class="btn btn-dark">Change Password</a>
+
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="ShowModal()">
                 Delete my account
-            </button>
-        </td>
-    </tr>
+</button>
+   
+        </div>
+      
     @if (User.IsInRole(RoleConstants.StudentRole))
     {
-        <tr>
-            <td>
-                <a asp-controller="Profile" asp-action="BecomeTeacher" class="btn btn-primary">I'm a teacher</a>
-            </td>
-        </tr>
+        <a asp-controller="Profile" asp-action="BecomeTeacher" class="btn btn-primary mt-4">I'm a teacher</a>
     }
+   </div>
 
-</table>
 
 <!-- Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

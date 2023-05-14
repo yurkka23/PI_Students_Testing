@@ -1,65 +1,33 @@
 ﻿@model EduHub.Application.Models.Profile.EditProfileModel;
 
 
-<form asp-action="EditProfile" asp-controller="Profile" method="post" enctype="multipart/form-data" class="form-group">
-    <table class="table">
-        <tr>
-            <td>
-                <div>
-                    <h6>
-                        <label asp-for="UserName">New username</label>
-                    </h6>
-                    <input asp-for="UserName" value="@Model.UserName" class="form-control w-25"/>
-                    <span asp-validation-for="UserName"></span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div>
-                    <h6>
-                        <label asp-for="FirstName">New first name</label>
-                    </h6>
-                    <input asp-for="FirstName" value="@Model.FirstName" class="form-control w-25"/>
-                    <span asp-validation-for="FirstName"></span>
-                </div>
-                <div>
-                    <h6>
-                        <label asp-for="LastName">New last name</label>
-                    </h6>
-                    <input asp-for="LastName" value="@Model.LastName" class="form-control w-25"/>
-                    <span asp-validation-for="LastName"></span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div>
-                    <h6>
-                        <label asp-for="AboutMe">About Me</label><br/>
-                    </h6>
-                    <textarea asp-for="AboutMe" value="@Model.AboutMe" class="form-control w-25" ></textarea>
-                    <span asp-validation-for="AboutMe"></span>
-                </div>
-            </td>
-        </tr>
-                   
-        <input asp-for="Email" value="@Model.Email" hidden class="form-control w-25"/>
-           
-        <tr>
-            <div asp-validation-summary="ModelOnly"></div>
-        </tr>
-        <tr>
-            <td>
-                <p>
-                    <input type="submit" value="Update" class="btn btn-success"/>
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <button asp-controller="Profile" asp-action="MyProfile" class="btn btn-dark">Back</button>
-            </td>
-        </tr>
-    </table>
+<form asp-action="EditProfile" asp-controller="Profile" method="post" enctype="multipart/form-data" class="form-group m-3">
+      <h4>Edit profile</h4>
+
+     <div>
+            <label asp-for="UserName" class="text-secondary fs-6">New UserName</label><br/>
+            <input asp-for="UserName" value="@Model.UserName" class="form-control" style="width:340px"/>
+            <span asp-validation-for="UserName" class="text-danger fs-6"></span>
+     </div>
+       <div>
+            <label asp-for="FirstName" class="text-secondary fs-6">New FirstName</label><br/>
+            <input asp-for="FirstName" value="@Model.FirstName"  class="form-control" style="width:340px"/>
+            <span asp-validation-for="FirstName" class="text-danger fs-6"></span>
+        </div>
+        <div>
+            <label asp-for="LastName" class="text-secondary fs-6">New LastName</label><br/>
+            <input asp-for="LastName"  value="@Model.LastName" class="form-control" style="width:340px"/>
+            <span asp-validation-for="LastName" class="text-danger fs-6"></span>
+        </div>
+        <div>
+            <label asp-for="AboutMe" class="text-secondary fs-6">New About Me</label><br/>
+            <textarea asp-for="AboutMe"  value="@Model.AboutMe" class="form-control" style="width:340px"></textarea>
+            <span asp-validation-for="AboutMe" class="text-danger fs-6"></span>
+        </div>
+         <input asp-for="Email" value="@Model.Email" hidden class="form-control w-25"/>
+         <div class="d-flex mb-2 gap-3 mt-3">
+           <button asp-controller="Profile" asp-action="MyProfile" class="btn btn-dark">Back</button>
+              <input type="submit" value="Update" class="btn btn-success"/>
+        </div>  
+
 </form>

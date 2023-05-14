@@ -127,4 +127,10 @@ public class AdminController : Controller
 
         return RedirectToAction("Teachers");
     }
+    public async Task<IActionResult> StudentProfile(Guid id)
+    {
+        var res = await _userService.GetStudentProfileAsync(id);
+
+        return this.View(res);
+    }
 }

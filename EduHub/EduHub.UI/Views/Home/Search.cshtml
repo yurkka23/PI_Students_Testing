@@ -3,13 +3,13 @@
 @using EduHub.Domain.Constants
 
 
-<div class="d-flex flex-wrap g-1">
+<div class="d-flex justify-content-center justify-content-md-start justify-content-lg-start flex-wrap g-1">
     @foreach (var course in Model)
     {
-        <div class="content p-4 w-25 m-5">
+        <div class="content p-4 m-5">
         <h4>Course name: @course.Name</h4>
         <div>Description: @course.Description</div>
-         <h5>Teacher: @course?.Teacher?.FirstName  @course?.Teacher?.LastName</h5>
+         <a class="teacher-link" asp-controller="Profile" asp-action="TeacherProfile" asp-route-id="@course?.Teacher?.Id">Teacher: @course?.Teacher?.FirstName  @course?.Teacher?.LastName</a>
 
         <div>Created at: @course.CreatedAt.ToString("dd/MM yyyy")</div>
 

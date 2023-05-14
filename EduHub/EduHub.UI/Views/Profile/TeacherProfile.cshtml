@@ -1,0 +1,93 @@
+﻿@model EduHub.Application.DTOs.User.UserDTO
+@using System.Globalization
+@using EduHub.Domain.Constants
+
+    <div class="content p-4 m-5">
+         <div class="d-flex g-3 flex-wrap">
+         @if (Model.UserImgUrl != null)
+         {
+             <img style='width: 200px; height: 200px; border-radius: 100%; object-fit: cover;' src="@Model.UserImgUrl"/>
+         }
+         else
+         {
+             <img style='width: 200px; height: 200px; border-radius: 100%; object-fit: cover;' src="https://localhost:7056/AppFiles/images/base-user-icon.jpg"/>
+         }
+         <div class="m-3">
+             <h4>Name: @Model.FirstName @Model.LastName</h4>
+              <h4>Username: @Model.UserName</h4>
+              <h5>Contact me: @Model.Email</h5>
+              <div>About me: @Model.AboutMe</div>
+             
+         </div>
+         </div>
+        
+      
+        <div class="d-flex gap-5 flex-wrap">
+        @foreach (var course in Model?.Courses)
+        {
+            <div class="card m-1">
+                <div class="card-body">
+                     <h4>Course name: @course.Name</h4>
+                     <div>Description: @course.Description</div>
+                    <div>Created at: @course.CreatedAt.ToString("G",CultureInfo.GetCultureInfo("de-DE"))</div>
+                     @if (User.IsInRole(RoleConstants.StudentRole))
+                      {
+                @if (@course?.Password == null)
+                {
+                    <a class="btn btn-dark align-self-center px-5 rounded-sm text-center m-1 " asp-controller="Course" asp-action="AddCourseToStudentWithoutPassword" asp-route-courseId="@course.Id"> Enroll now</a>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-dark align-self-center px-5 rounded-sm text-center m-1" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@course.Id">Enroll now</button>
+                }
+        }
+                </div>
+            </div>
+        }
+        </div>
+     </div>
+
+     
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Enter password to enroll</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="password" class="col-form-label">Password: </label>
+            <input type="text" class="form-control" id="password">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="sendRequest()">Sent</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    var exampleModal = document.getElementById('exampleModal')
+    var courseId;
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var recipient = button.getAttribute('data-bs-whatever')
+        courseId = recipient;
+        var modalBodyInput = exampleModal.querySelector('.modal-body input')
+    })
+
+    function sendRequest() {
+        var inputVal = document.getElementById("password").value;
+
+        var queryParams = "?password=" + inputVal;
+        queryParams += "&courseId=" + courseId;
+
+        window.location.href = "/Course/AddStudentToCourse" + queryParams;
+    }
+</script>

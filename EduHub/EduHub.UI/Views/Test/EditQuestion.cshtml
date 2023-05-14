@@ -2,7 +2,7 @@
 @using EduHub.Domain.Enums;
 @model EduHub.UI.ViewModels.Question.EditQuestionVM;
 
-<div class="teachers-courses-wrapper">
+<div class="m-1 d-flex flex-wrap gap-2">
     <div class="courses-sidebar">
         <h3>My courses</h3>
         <a class="add-course" method="post" asp-controller="Course" asp-action="AddCourse"><i class="bi bi-plus-circle"></i> Add course</a>
@@ -33,7 +33,7 @@
 
 
  <form method="post" asp-controller="Test" asp-action="EditQuestion" enctype="multipart/form-data" class="d-flex flex-column align-items-center">
-    <div class="d-flex flex-column align-items-start width-30vw p-4">
+    <div class="d-flex flex-column align-items-start p-1">
         <h5> Edit Question</h5>
 
         <input asp-for="EditQuestion.TestId" value="@Model.Test?.Id" hidden/>
@@ -41,12 +41,12 @@
 
         <div>
             <label asp-for="EditQuestion.QuestionContent" class="text-secondary fs-6">Question</label><br/>
-            <input asp-for="EditQuestion.QuestionContent" value="@Model.EditQuestion?.QuestionContent" class="rounded width-30vw"/>
+            <input asp-for="EditQuestion.QuestionContent" value="@Model.EditQuestion?.QuestionContent" class="form-control" style="width:300px"/>
             <span asp-validation-for="EditQuestion.QuestionContent" class="text-danger fs-6"></span>
         </div>
         <div>
             <label asp-for="EditQuestion.Points" class="text-secondary fs-6">Points</label><br/>
-            <input asp-for="EditQuestion.Points" value="@Model.EditQuestion?.Points" min="0" class="rounded width-30vw"/>
+            <input asp-for="EditQuestion.Points" value="@Model.EditQuestion?.Points" min="0" class="form-control" style="width:300px"/>
             <span asp-validation-for="EditQuestion.Points" class="text-danger fs-6"></span>
         </div>
 

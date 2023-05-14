@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @model EduHub.UI.ViewModels.Teacher.CourseVM;
 
-<div class="teachers-courses-wrapper">
+<div class="m-3 d-flex flex-wrap gap-2">
     <div class="courses-sidebar">
         <h3>My courses</h3>
         <a class="add-course" method="post" asp-controller="Course" asp-action="AddCourse"><i class="bi bi-plus-circle"></i> Add course</a>
@@ -37,10 +37,9 @@
 
         <h5>Course Test: </h5>
          <a asp-controller="Test" asp-action="AddTest" asp-route-id="@Model.Course?.Id" class="btn btn-secondary"><i class="bi bi-plus-circle"></i>  Add test</a>
-
         @foreach (var test in Model.Course?.Tests)
         {
-            <div class="card w-100 m-1">
+            <div class="card m-1">
                 <div class="card-body">
                     <h5 class="card-title">@test.Name</h5>
                     <p class="card-text">Description: @test.Description</p>
@@ -48,7 +47,9 @@
                     <div class="card-text">End at: @test.EndTime.ToString("G",CultureInfo.GetCultureInfo("de-DE"))</div>
                     <div class="card-text">Duration: @test.DurationMinutes</div>
                     <div class="d-flex gap-4">
-                        <a class="btn btn-primary"  asp-controller="Test" asp-action="Test" asp-route-id=" @test.Id" >Show more</a>
+                        <a class="btn btn-primary"  asp-controller="Test" asp-action="Test" asp-route-id=" @test.Id" >Edit test</a>
+                        <a class="btn btn-primary"  asp-controller="Test" asp-action="TestResults" asp-route-testId=" @test.Id" >Show test results</a>
+
                         <a class="btn btn-danger" asp-controller="Test" asp-action="DeleteTest" asp-route-id=" @test.Id" asp-route-courseId="@Model.Course.Id" >Delete</a>
                     </div>
                 </div>

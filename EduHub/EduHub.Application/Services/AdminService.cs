@@ -113,7 +113,7 @@ namespace EduHub.Application.Services
         }
 
         public async Task<(IEnumerable<UserDTO> teachers, int count)> GetTeachersAsync(int pageNum, int _sizeLimit,
-            string search)
+            string? search)
         {
             if (search != null)
             {
@@ -132,7 +132,6 @@ namespace EduHub.Application.Services
                 return (teachersSearch, countSearch);
             }
 
-            var man = await _userManager.FindByIdAsync(Guid.Parse("D1800BD2-5C37-408F-A3CB-6AFB635B4717").ToString());
             var count = (await _userManager.GetUsersInRoleAsync(RoleConstants.TeacherRole))
                 .Count();
 
@@ -144,7 +143,7 @@ namespace EduHub.Application.Services
         }
 
         public async Task<(IEnumerable<UserDTO> students, int count)> GetStudentsAsync(int pageNum, int _sizeLimit,
-            string search)
+            string? search)
         {
             if (search != null)
             {

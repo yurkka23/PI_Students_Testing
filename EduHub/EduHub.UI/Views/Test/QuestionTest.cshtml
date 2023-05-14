@@ -1,7 +1,7 @@
 ﻿@model EduHub.Application.DTOs.Test.PassingTestDTO;
 @using EduHub.Domain.Enums;
 
-<div class="start-test-wrapper m-5">
+<div class="d-flex flex-column flex-md-row flex-lg-row align-items-center gap-2 m-2 ">
     @{
         int temp = 0;
         int indexCurentQuestio = 0;
@@ -148,7 +148,6 @@
                }
            }else{
                this.FinishTest('@Model?.CurrentQuestion?.TestId', '@Model?.CurrentQuestion?.Id')
-               // FinishTest('@Model?.CurrentQuestion?.TestId', '@Model?.CurrentQuestion?.Id')";
                 clearInterval(_tick)
            }
 
@@ -162,7 +161,6 @@
         queryParams += "&testId=" + testId;
         queryParams += "&secondsRemains=" + remSeconds;
         queryParams += "&questionAnswerId=" + currentQuestionId;
-            debugger
             let  answerOneId = document.querySelector('input[type="radio"]:checked')?.value?.toString();
             if(answerOneId){
                  queryParams += "&answerOne=" + answerOneId;
@@ -182,7 +180,6 @@
                   });
                   queryParams += "&answersMulti=" + answerMultiIds;
             }
-           debugger       
         window.location.href = "/Test/QuestionTest" + queryParams;
 
     }

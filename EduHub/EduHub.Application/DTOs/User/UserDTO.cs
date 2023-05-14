@@ -16,7 +16,9 @@ namespace EduHub.Application.DTOs.User
         public DateTimeOffset RegisterTime { get; set; }
 
         public ICollection<CourseDTO>? Courses { get; set; }
+        public ICollection<CourseDTO>? StudentCourses { get; set; }
+
         public ICollection<TestDTO>? Tests { get; set; }
-        public ICollection<TestResultDTO>? TestResults { get; set; }
+        public IEnumerable<TestResultDTO>? TestResults { get; set; }
     }
 }

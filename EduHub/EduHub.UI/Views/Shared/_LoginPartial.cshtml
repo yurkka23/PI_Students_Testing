@@ -7,21 +7,21 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Profile" asp-action="MyProfile" title="Manage">Hello @User.Identity.Name!</a>
+            <a class="btn btn-primary me-3 mt-2" asp-controller="Profile" asp-action="MyProfile" title="Manage">Hello @User.Identity.Name!</a>
         </li>
         <li class="nav-item">
             <form class="form-inline" method="post" asp-controller="Auth" asp-action="Logout">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                <button type="submit" class="btn btn-danger me-3 mt-2">Logout</button>
             </form>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" method="post" asp-controller="Auth" asp-action="Register">Sign up</a>
+            <a class="btn btn-primary mt-2 me-3" method="post" asp-controller="Auth" asp-action="Register">Sign up</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" method="post" asp-controller="Auth" asp-action="Login">Sign in</a>
+            <a class="btn btn-success mt-2 me-3" method="post" asp-controller="Auth" asp-action="Login">Sign in</a>
         </li>
     }
 </ul>

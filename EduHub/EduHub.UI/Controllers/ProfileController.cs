@@ -191,4 +191,10 @@ public class ProfileController : Controller
 
         return RedirectToAction("Index", "Home");
     }
+    public async Task<IActionResult> TeacherProfile(Guid id)
+    {
+        var res = await _userService.GetTeacherProfileAsync(id);
+
+        return this.View(res);
+    }
 }

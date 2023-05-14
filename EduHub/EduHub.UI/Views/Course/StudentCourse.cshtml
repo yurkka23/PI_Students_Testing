@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @model EduHub.UI.ViewModels.Teacher.CourseVM;
 
-<div class="teachers-courses-wrapper">
+<div class="m-3 d-flex flex-wrap gap-2">
     <div class="courses-sidebar">
         <h3>My courses</h3>
         @foreach (var course in Model.Courses)
@@ -22,10 +22,10 @@
 
     </div>
 
-    <div class="content p-4">
+    <div class="content p-4 w-75">
         <h4>Course name: @Model.Course?.Name</h4>
         <div>Description: @Model.Course?.Description</div>
-        <h5>Teacher: @Model.Course?.Teacher?.FirstName  @Model.Course?.Teacher?.LastName</h5>
+        <a class="teacher-link" asp-controller="Profile" asp-action="TeacherProfile" asp-route-id="@Model?.Course?.Teacher?.Id">Teacher: @Model.Course?.Teacher?.FirstName  @Model.Course?.Teacher?.LastName</a>
 
         <div>Created at: @Model.Course?.CreatedAt.ToString("dd/MM yyyy")</div>
 
@@ -36,10 +36,10 @@
         </button>
 
         <h5>Course Test: </h5>
-
+        <div class="d-flex gap-3 flex-wrap w-75">
         @foreach (var test in Model.Course?.Tests)
         {
-            <div class="card w-100 m-1">
+            <div class="card m-1">
                 <div class="card-body">
                     <h5 class="card-title">@test.Name</h5>
                     <p class="card-text">Description: @test.Description</p>
@@ -58,6 +58,7 @@
                 </div>
             </div>
         }
+        </div>
      </div>
 
 </div>

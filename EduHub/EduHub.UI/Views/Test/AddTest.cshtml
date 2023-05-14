@@ -1,6 +1,6 @@
 ﻿@model EduHub.UI.ViewModels.Test.AddTestVM;
 
-<div class="teachers-courses-wrapper">
+<div class="m-1 d-flex flex-wrap gap-2">
     <div class="courses-sidebar">
         <h3>My courses</h3>
         <a class="add-course" method="post" asp-controller="Course" asp-action="AddCourse"><i class="bi bi-plus-circle"></i> Add course</a>
@@ -25,36 +25,36 @@
     <div class="content p-4">
               
 <form method="post" asp-controller="Test" asp-action="AddTest" enctype="multipart/form-data" class="d-flex flex-column align-items-center">
-    <div class="d-flex flex-column align-items-start width-30vw p-4">
+    <div class="d-flex flex-column align-items-start p-1">
         <h5> Add test</h5>
 
         <input asp-for="AddTest.CourseId" value="@Model.Course?.Id" hidden/>
 
         <div>
             <label asp-for="AddTest.Name" class="text-secondary fs-6">Name</label><br/>
-            <input asp-for="AddTest.Name" class="rounded width-30vw"/>
+            <input asp-for="AddTest.Name" class="form-control" style="width:300px"/>
             <span asp-validation-for="AddTest.Name" class="text-danger fs-6"></span>
         </div>
         <div>
             <label asp-for="AddTest.Description" class="text-secondary fs-6">Description</label><br/>
-            <input asp-for="AddTest.Description" class="rounded width-30vw"/>
+            <input asp-for="AddTest.Description" class="form-control" style="width:300px"/>
             <span asp-validation-for="AddTest.Description" class="text-danger fs-6"></span>
         </div>
         <div>
             <label asp-for="AddTest.DurationMinutes" class="text-secondary fs-6">Duration Minutes</label><br/>
-            <input asp-for="AddTest.DurationMinutes" min="0" class="rounded width-30vw"/>
+            <input asp-for="AddTest.DurationMinutes" min="0" class="form-control" style="width:300px"/>
             <span asp-validation-for="AddTest.DurationMinutes" class="text-danger fs-6"></span>
         </div>
 
         <div>
             <label asp-for="AddTest.StartTime" class="text-secondary fs-6">Start Time</label><br/>
-            <input asp-for="AddTest.StartTime" type="datetime-local"  min="2023-04-28T00:00" class="rounded width-30vw"/>
+            <input asp-for="AddTest.StartTime" type="datetime-local"  min="2023-05-01T00:00" class="form-control" style="width:300px"/>
             <span asp-validation-for="AddTest.StartTime" class="text-danger fs-6"></span>
         </div>
 
         <div>
             <label asp-for="AddTest.EndTime" class="text-secondary fs-6">End Time</label><br/>
-            <input asp-for="AddTest.EndTime" type="datetime-local"  min="2023-04-28T00:00" class="rounded width-30vw"/>
+            <input asp-for="AddTest.EndTime" type="datetime-local"  min="2023-05-02T00:00" class="form-control" style="width:300px"/>
             <span asp-validation-for="AddTest.EndTime" class="text-danger fs-6"></span>
         </div>
 

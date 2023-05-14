@@ -1,7 +1,6 @@
-﻿namespace EduHub.Domain.Settings
+﻿namespace EduHub.Domain.Settings;
+
+public class HostSettings
 {
-    public class HostSettings
-    {
-        public string CurrentHost { get; set; } = string.Empty;
-    }
+    public string CurrentHost { get; set; } = string.Empty;
 }

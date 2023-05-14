@@ -6,8 +6,8 @@
 
 <h3>Students:</h3>
 
-<form asp-action="Students" method="post" class="form-group d-flex gap-4">
-    <input type="text" name="search" value="@ViewData["CurrentFilter"]" class="form-control w-25"/>
+<form asp-action="Students" method="post" class="form-group d-flex flex-wrap gap-4">
+    <input type="text" name="search" value="@ViewData["CurrentFilter"]" class="form-control w-50"/>
     <input type="submit" value="Search" class="btn btn-primary"/>
     <a asp-action="Students" class="btn btn-outline-dark">Back to Full List</a>
 </form>
@@ -32,7 +32,7 @@
                 <p class="card-text" style='height: 100px;  overflow: auto'>@student.AboutMe</p>
                 <p class="card-text">Register at: @student.RegisterTime.ToString("dd/MM yyyy")</p>
 
-                <a asp-controller="Admin" asp-action="ShowMoreInfo" asp-route-id=" @student.Id" class="btn btn-primary">Show more info</a>
+                <a asp-controller="Admin" asp-action="StudentProfile" asp-route-id=" @student.Id" class="btn btn-primary">Show more info</a>
                 <a asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@student.Id" class="btn btn-danger">Delete user</a>
             </div>
         </div>

@@ -170,6 +170,24 @@ public class TestController : Controller
 
         return RedirectToAction("Test", "Test", new { id = model.EditTest.Id });
     }
+    [Authorize(Roles = RoleConstants.AdminRole + "," + RoleConstants.TeacherRole)]
+    public async Task<IActionResult> TestResults(Guid testId)
+    {
+        var test = await _testService.GetTestAsync(testId);
+
+        var courses = await _courseService.GetTeachersCoursesAsync(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+        var testResults = await _testService.GetTestResultsForTeacherAsync(testId);
+
+        var vm = new TestVM()
+        {
+            Test = test,
+            Courses = courses,
+            Results = testResults
+        };
+
+        return this.View(vm);
+    }
+
 
     [Authorize(Roles = RoleConstants.AdminRole + "," + RoleConstants.TeacherRole)]
     public async Task<IActionResult> AddQuestion(Guid id)
@@ -445,6 +463,5 @@ public class TestController : Controller
             return RedirectToAction("StudentCourses");
         }
     }
-
 
 }

@@ -1,39 +1,24 @@
 ﻿@model EduHub.Application.Models.Profile.ChangePhotoModel;
 
 
-<form asp-action="ChangePhoto" asp-controller="Profile" method="post" enctype="multipart/form-data">
-    <table class="table">
-        <tr>
-            <td>
+<form asp-action="ChangePhoto" asp-controller="Profile" method="post" enctype="multipart/form-data" class="m-4">
                 @if (Model.UserImgUrl != null)
                 {
-                    <img style='width: 30%; height: auto;' src="@Model.UserImgUrl"/>
+                    <img style='width: 200px; height: 200px; border-radius: 100%; object-fit: cover;' src="@Model.UserImgUrl"/>
                 }
                 else
                 {
-                    <img style='width: 30%; height: auto;' src="https://localhost:7056/AppFiles/images/base-user-icon.jpg"/>
+                    <img style='width: 200px; height: 200px; border-radius: 100%; object-fit: cover;' src="https://localhost:7056/AppFiles/images/base-user-icon.jpg"/>
                 }
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div>
-                    <h6>
-                        <label asp-for="NewProfileImage">Add New profile image</label>
-                    </h6>
-                    <input asp-for="NewProfileImage" class="btn btn-secondary"/>
-                    <span asp-validation-for="NewProfileImage"></span>
-                </div>
-            </td>
-        </tr>
-        <div asp-validation-summary="ModelOnly"></div>
-        <tr>
-            <td>
-                <p>
-                    <input type="submit" value="Change Photo" class="btn btn-success"/>
-                </p>
-                <button asp-controller="Profile" asp-action="MyProfile" class="btn btn-dark">Back</button>
-            </td>
-        </tr>
-    </table>
+      <div>
+            <label asp-for="NewProfileImage">Add New profile image</label><br/>
+            <input asp-for="NewProfileImage" value="New photo" class="btn btn-secondary"/>
+            <span asp-validation-for="NewProfileImage" class="text-danger fs-6"></span>
+      </div>
+      <div asp-validation-summary="ModelOnly"></div>
+       <div class="d-flex mb-2 gap-3 mt-3">
+           <button asp-controller="Profile" asp-action="MyProfile" class="btn btn-dark">Back</button>
+            <input type="submit" value="Change Photo" class="btn btn-success"/>
+        </div>   
+  
 </form>

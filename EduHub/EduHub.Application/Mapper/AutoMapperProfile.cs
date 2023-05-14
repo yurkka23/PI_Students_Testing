@@ -12,33 +12,41 @@ using EduHub.Application.Models.Question;
 using EduHub.Application.Models.Test;
 using EduHub.Domain.Constants;
 using EduHub.Domain.Entities;
+using EduHub.Domain.Settings;
 
-namespace EduHub.Application.Mapper
+namespace EduHub.Application.Mapper;
+
+public class AutoMapperProfile : Profile
 {
-    public class AutoMapperProfile : Profile
+    private readonly HostSettings _hostSettings;
+    public AutoMapperProfile()
     {
-        public AutoMapperProfile()
-        {
-            CreateMap<User, UserDTO>()
-                .ForMember(s => s.UserImgUrl,
-                    s => s.MapFrom(map => map.UserImgUrl == null ? null : HostConstant.CurrentHost + map.UserImgUrl));
-            CreateMap<AnswerOption, AnswerOptionDTO>().ReverseMap();
-            CreateMap<Question, QuestionDTO>().ReverseMap();
-            CreateMap<Course, CourseDTO>().ReverseMap();
-            CreateMap<CourseDTO, EditCourseModel>().ReverseMap();
-            CreateMap<TestDTO, EditTestModel>().ReverseMap();
-            CreateMap<QuestionDTO, EditQuestionModel>().ReverseMap();
-            CreateMap<Test, PassingTestDTO>().ReverseMap();
 
-            CreateMap<Test, TestDTO>().ReverseMap();
-            CreateMap<TestResult, TestResultDTO>().ReverseMap();
+    }
+    public AutoMapperProfile(HostSettings hostSettings)
+    {
+        _hostSettings = hostSettings;
 
-            CreateMap<TestResult, TestResultDTO>().ReverseMap();
-            CreateMap<UserDTO, EditProfileModel>().ReverseMap();
-            CreateMap<UserDTO, ChangePasswordModel>().ReverseMap();
-            CreateMap<UserDTO, ChangePhotoModel>().ReverseMap();
-            CreateMap<TeacherRequest, TeacherRequestDTO>()
-                .ForMember(s => s.ProofImage, s => s.MapFrom(map => HostConstant.CurrentHost + map.ProofImage));
-        }
+    CreateMap<User, UserDTO>()
+            .ForMember(s => s.UserImgUrl,
+                s => s.MapFrom(map => map.UserImgUrl == null ? null : _hostSettings.CurrentHost + map.UserImgUrl))
+            .ForMember(s => s.StudentCourses, s => s.MapFrom(x => x.StudentsCourses.Select(x => x.Course)));
+        CreateMap<AnswerOption, AnswerOptionDTO>().ReverseMap();
+        CreateMap<Question, QuestionDTO>().ReverseMap();
+        CreateMap<Course, CourseDTO>().ReverseMap();
+        CreateMap<CourseDTO, EditCourseModel>().ReverseMap();
+        CreateMap<TestDTO, EditTestModel>().ReverseMap();
+        CreateMap<QuestionDTO, EditQuestionModel>().ReverseMap();
+        CreateMap<Test, PassingTestDTO>().ReverseMap();
+
+        CreateMap<Test, TestDTO>().ReverseMap();
+        CreateMap<TestResult, TestResultDTO>().ReverseMap();
+
+        CreateMap<TestResult, TestResultDTO>().ReverseMap();
+        CreateMap<UserDTO, EditProfileModel>().ReverseMap();
+        CreateMap<UserDTO, ChangePasswordModel>().ReverseMap();
+        CreateMap<UserDTO, ChangePhotoModel>().ReverseMap();
+        CreateMap<TeacherRequest, TeacherRequestDTO>()
+            .ForMember(s => s.ProofImage, s => s.MapFrom(map => _hostSettings.CurrentHost + map.ProofImage));
     }
 }

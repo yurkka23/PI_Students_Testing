@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @model EduHub.UI.ViewModels.Test.EditTestVM;
 
-<div class="teachers-courses-wrapper">
+<div class="m-1 d-flex flex-wrap gap-2">
     <div class="courses-sidebar">
         <h3>My courses</h3>
         <a class="add-course" method="post" asp-controller="Course" asp-action="AddCourse"><i class="bi bi-plus-circle"></i> Add course</a>
@@ -26,7 +26,7 @@
     <div class="content p-4">
               
 <form method="post" asp-controller="Test" asp-action="EditTest" enctype="multipart/form-data" class="d-flex flex-column align-items-center">
-    <div class="d-flex flex-column align-items-start width-30vw p-4">
+    <div class="d-flex flex-column align-items-start p-1">
         <h5> Edit test</h5>
 
         <input asp-for="EditTest.CourseId" value="@Model.EditTest?.CourseId" hidden/>
@@ -35,29 +35,29 @@
 
         <div>
             <label asp-for="EditTest.Name" class="text-secondary fs-6">Name</label><br/>
-            <input asp-for="EditTest.Name"  value="@Model.EditTest?.Name" class="rounded width-30vw"/>
+            <input asp-for="EditTest.Name"  value="@Model.EditTest?.Name" class="form-control" style="width:300px"/>
             <span asp-validation-for="EditTest.Name" class="text-danger fs-6"></span>
         </div>
         <div>
             <label asp-for="EditTest.Description" class="text-secondary fs-6">Description</label><br/>
-            <input asp-for="EditTest.Description"  value="@Model.EditTest?.Description" class="rounded width-30vw"/>
+            <input asp-for="EditTest.Description"  value="@Model.EditTest?.Description"class="form-control" style="width:300px"/>
             <span asp-validation-for="EditTest.Description" class="text-danger fs-6"></span>
         </div>
         <div>
             <label asp-for="EditTest.DurationMinutes" class="text-secondary fs-6">Duration Minutes</label><br/>
-            <input asp-for="EditTest.DurationMinutes"  value="@Model.EditTest?.DurationMinutes" min="0" class="rounded width-30vw"/>
+            <input asp-for="EditTest.DurationMinutes"  value="@Model.EditTest?.DurationMinutes" min="0" class="form-control" style="width:300px"/>
             <span asp-validation-for="EditTest.DurationMinutes" class="text-danger fs-6"></span>
         </div>
 
         <div>
             <label asp-for="EditTest.StartTime" class="text-secondary fs-6">Start Time</label><br/>
-            <input asp-for="EditTest.StartTime"  value="@Model.EditTest?.StartTime.ToString("s",CultureInfo.GetCultureInfo("de-DE"))" type="datetime-local"  min="2023-04-28T00:00" class="rounded width-30vw"/>
+            <input asp-for="EditTest.StartTime"  value="@Model.EditTest?.StartTime.ToString("s",CultureInfo.GetCultureInfo("de-DE"))" type="datetime-local"  min="2023-05-01T00:00" class="form-control" style="width:300px"/>
             <span asp-validation-for="EditTest.StartTime" class="text-danger fs-6"></span>
         </div>
 
         <div>
             <label asp-for="EditTest.EndTime" class="text-secondary fs-6">End Time</label><br/>
-            <input asp-for="EditTest.EndTime" type="datetime-local"  value="@Model.EditTest?.EndTime.ToString("s",CultureInfo.GetCultureInfo("de-DE"))"  min="2023-04-28T00:00" class="rounded width-30vw"/>
+            <input asp-for="EditTest.EndTime" type="datetime-local"  value="@Model.EditTest?.EndTime.ToString("s",CultureInfo.GetCultureInfo("de-DE"))"  min="2023-05-02T00:00" class="form-control" style="width:300px"/>
             <span asp-validation-for="EditTest.EndTime" class="text-danger fs-6"></span>
         </div>
 
