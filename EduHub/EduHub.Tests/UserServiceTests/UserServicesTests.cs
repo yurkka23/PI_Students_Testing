@@ -34,7 +34,7 @@ public class UserServicesTests
         _userManagerMock = MockUserManager.GetMock();
 
         _unitOfWorkMock = new Mock<IUnitOfWork>();
-        _fileService = new FileService();
+       // _fileService = new FileService();
 
         _repositoryUserMock = MockUserRepository.GetMock();
         _repositoryTestResultMock = MockTestResultsRepository.GetMock();

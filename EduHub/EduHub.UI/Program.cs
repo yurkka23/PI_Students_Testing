@@ -13,7 +13,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
 using Serilog.Events;
-using ServiceStack.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
@@ -41,6 +40,11 @@ builder.Services.AddScoped<HostSettings>(_ => hostSettings);
 var urlSettings = new UrlSettings();
 builder.Configuration.GetSection("UrlSettings").Bind(urlSettings);
 builder.Services.AddScoped<UrlSettings>(_ => urlSettings);
+
+//Blob
+var blobSettings = new BlobStorageSettings();
+builder.Configuration.GetSection("BlobStorageSettings").Bind(blobSettings);
+builder.Services.AddScoped<BlobStorageSettings>(_ => blobSettings);
 
 // SendGrid
 var sendGridSettings = new SendGridSettings();
@@ -97,11 +101,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"AppFiles")),
-    RequestPath = new PathString("/AppFiles")
-});
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"AppFiles")),
+//    RequestPath = new PathString("/AppFiles")
+//});
 
 app.UseRouting();
 app.UseAuthentication();

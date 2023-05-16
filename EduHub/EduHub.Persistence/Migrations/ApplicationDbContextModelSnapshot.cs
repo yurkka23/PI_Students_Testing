@@ -90,22 +90,22 @@ namespace EduHub.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4078fbc5-aac2-4ee0-893e-c17b73b0f0b9"),
-                            ConcurrencyStamp = "5dd8ac1d-0407-4bc4-98c2-4703dec9fb14",
+                            Id = new Guid("33a0ef2c-7da6-45a6-ae36-c9e3dce66c66"),
+                            ConcurrencyStamp = "054d2aa9-24a9-423f-9248-479886d22e77",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("945ae692-7677-474a-a51d-d1dbc66b5156"),
-                            ConcurrencyStamp = "32e9aae9-9434-4b7b-8fd5-be708650becc",
+                            Id = new Guid("b5314384-a039-4a7e-b896-8016203cfe58"),
+                            ConcurrencyStamp = "1d40614b-381f-4a24-a268-b2d2fe9732d9",
                             Name = "student",
                             NormalizedName = "STUDENT"
                         },
                         new
                         {
-                            Id = new Guid("f6b7c0ef-09ea-4301-a2ee-627a66f95b18"),
-                            ConcurrencyStamp = "918514e3-ccf2-4e82-93ca-3ab3325182be",
+                            Id = new Guid("85ca209b-5904-4135-9ee4-833ab5900e70"),
+                            ConcurrencyStamp = "b3cf4120-d9ef-43c1-8590-43b91a42fbf5",
                             Name = "teacher",
                             NormalizedName = "TEACHER"
                         });
@@ -479,6 +479,27 @@ namespace EduHub.Persistence.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("8e445865-a24d-4543-a6c6-9443d048cdb8"),
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "3933b6f9-affa-4c92-8691-4a4a1d0e027e",
+                            Email = "admin2@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "admin2",
+                            LastName = "admin",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN2@GMAIL.COM",
+                            NormalizedUserName = "ADMIN2",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDbv2gdENQQEj74VQ3pFfKXFJmAUYXlYNRuIcXMz/qFC2aIFabazxJVkWBgHDCuIvQ==",
+                            PhoneNumberConfirmed = false,
+                            RegisterTime = new DateTimeOffset(new DateTime(2023, 5, 14, 12, 35, 54, 478, DateTimeKind.Unspecified).AddTicks(3944), new TimeSpan(0, 0, 0, 0, 0)),
+                            SecurityStamp = "2FIUSIDWWXNH7N6KXWVZFFGAICGDPTX7",
+                            TwoFactorEnabled = false,
+                            UserName = "admin2"
+                        });
                 });
 
             modelBuilder.Entity("EduHub.Domain.Entities.UserCourse", b =>
@@ -585,6 +606,13 @@ namespace EduHub.Persistence.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<Guid>");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("8e445865-a24d-4543-a6c6-9443d048cdb8"),
+                            RoleId = new Guid("33a0ef2c-7da6-45a6-ae36-c9e3dce66c66")
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>

@@ -7,6 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Content Remove="wwwroot\AppFiles\214b33b3-cfbd-424e-a537-33a1fee8218d.png" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.15">
             <PrivateAssets>all</PrivateAssets>
@@ -20,7 +24,6 @@
         <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
         <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
-        <PackageReference Include="ServiceStack.Text" Version="6.8.0" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -34,6 +37,10 @@
 
     <ItemGroup>
         <Folder Include="Logs\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\AppFiles\214b33b3-cfbd-424e-a537-33a1fee8218d.png" />
     </ItemGroup>
 
 </Project>

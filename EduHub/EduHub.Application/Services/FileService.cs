@@ -1,50 +1,61 @@
 ﻿using System.Net.Http.Headers;
 using EduHub.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Azure.Storage.Blobs;
+using EduHub.Domain.Settings;
 
-namespace EduHub.Application.Services
+namespace EduHub.Application.Services;
+
+public class FileService : IFileService
 {
-    public class FileService : IFileService
+    private readonly BlobContainerClient _blobContainerClient;
+    private readonly BlobStorageSettings _blobStorageSettings;
+
+    public FileService(BlobStorageSettings blobStorageSettings)
     {
-        public async Task<List<string>> SaveFiles(IEnumerable<IFormFile> collection)
+        _blobStorageSettings = blobStorageSettings;
+        _blobContainerClient = new BlobContainerClient(_blobStorageSettings.ConectionString, 
+            _blobStorageSettings.Container);
+    }
+    public async Task<List<string>> SaveFiles(IEnumerable<IFormFile> collection)
+    {
+        var files = new List<string>();
+        foreach (var file in collection)
         {
-            var files = new List<string>();
-            foreach (var file in collection)
-            {
-                files.Add(await SaveFile(file));
-            }
-
-            return files;
+            files.Add(await SaveFile(file));
         }
 
-        public async Task<string> SaveFile(IFormFile file)
-        {
-            var folderName = Path.Combine("AppFiles", "Images");
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"').Split(".");
+        return files;
+    }
 
-            var newFileName = new string(Guid.NewGuid() + "." + fileName.Last());
-            var fullPath = Path.Combine(pathToSave, newFileName);
-            var path = Path.Combine(folderName, newFileName);
-            await using (var stream = new FileStream(fullPath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
+    public async Task<string> SaveFile(IFormFile file)
+    {
+        await using var memory = new MemoryStream();
+        await file.CopyToAsync(memory);
 
-            return path;
-        }
+        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+        var blob = _blobContainerClient.GetBlobClient(fileName);
+        memory.Position = 0;
 
-        public void DeleteFiles(IEnumerable<string> files)
-        {
-            foreach (var file in files)
-            {
-                File.Delete(file);
-            }
-        }
+        await blob.UploadAsync(memory, true);
 
-        public void DeleteFile(string file)
+        var fileUrl = GetFileUrl(fileName);
+
+        return fileUrl;
+    }
+
+    public void DeleteFiles(IEnumerable<string> files)
+    {
+        foreach (var file in files)
         {
             File.Delete(file);
         }
     }
+
+    public void DeleteFile(string file)
+    {
+        //File.Delete(file);
+    }
+    private string GetFileUrl(string fileName) =>
+       $"{_blobStorageSettings.BlobUrl}/{fileName}";
 }

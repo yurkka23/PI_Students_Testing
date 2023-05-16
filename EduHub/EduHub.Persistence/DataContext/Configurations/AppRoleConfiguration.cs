@@ -17,21 +17,21 @@ namespace EduHub.Persistence.DataContext.Configurations
             //seed
             builder.HasData(new AppRole
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("33A0EF2C-7DA6-45A6-AE36-C9E3DCE66C66"),
                 Name = RoleConstants.AdminRole,
                 NormalizedName = RoleConstants.AdminRole.ToUpper()
             });
 
             builder.HasData(new AppRole
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("B5314384-A039-4A7E-B896-8016203CFE58"),
                 Name = RoleConstants.StudentRole,
                 NormalizedName = RoleConstants.StudentRole.ToUpper()
             });
 
             builder.HasData(new AppRole
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("85CA209B-5904-4135-9EE4-833AB5900E70"),
                 Name = RoleConstants.TeacherRole,
                 NormalizedName = RoleConstants.TeacherRole.ToUpper()
             });

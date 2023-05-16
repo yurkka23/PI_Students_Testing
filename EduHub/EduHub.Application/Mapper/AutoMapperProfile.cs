@@ -28,8 +28,8 @@ public class AutoMapperProfile : Profile
         _hostSettings = hostSettings;
 
     CreateMap<User, UserDTO>()
-            .ForMember(s => s.UserImgUrl,
-                s => s.MapFrom(map => map.UserImgUrl == null ? null : _hostSettings.CurrentHost + map.UserImgUrl))
+           // .ForMember(s => s.UserImgUrl,
+             //   s => s.MapFrom(map => map.UserImgUrl == null ? null : _hostSettings.CurrentHost + map.UserImgUrl))
             .ForMember(s => s.StudentCourses, s => s.MapFrom(x => x.StudentsCourses.Select(x => x.Course)));
         CreateMap<AnswerOption, AnswerOptionDTO>().ReverseMap();
         CreateMap<Question, QuestionDTO>().ReverseMap();
@@ -46,7 +46,7 @@ public class AutoMapperProfile : Profile
         CreateMap<UserDTO, EditProfileModel>().ReverseMap();
         CreateMap<UserDTO, ChangePasswordModel>().ReverseMap();
         CreateMap<UserDTO, ChangePhotoModel>().ReverseMap();
-        CreateMap<TeacherRequest, TeacherRequestDTO>()
-            .ForMember(s => s.ProofImage, s => s.MapFrom(map => _hostSettings.CurrentHost + map.ProofImage));
+        CreateMap<TeacherRequest, TeacherRequestDTO>();
+         //   .ForMember(s => s.ProofImage, s => s.MapFrom(map => _hostSettings.CurrentHost + map.ProofImage));
     }
 }

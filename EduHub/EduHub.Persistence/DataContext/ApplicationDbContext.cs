@@ -35,55 +35,15 @@ namespace EduHub.Persistence.DataContext
             base.OnModelCreating(builder);
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        //    builder.Entity<IdentityUserRole<Guid>>().HasData(
-        //  new IdentityUserRole<Guid>
-        //  {
-        //      RoleId = Guid.Parse("1CFBA6F6-50FA-4304-9140-4BD86F5A5885"),
-        //      UserId = Guid.Parse("8e445865-a24d-4543-a6c6-9443d048cdb8")
-        //  }
-        //);
+            builder.Entity<IdentityUserRole<Guid>>().HasData(
+          new IdentityUserRole<Guid>
+          {
+              RoleId = Guid.Parse("33A0EF2C-7DA6-45A6-AE36-C9E3DCE66C66"),
+              UserId = Guid.Parse("8e445865-a24d-4543-a6c6-9443d048cdb8")
+          }
+        );
 
-        //    builder.Entity<IdentityUserClaim<Guid>>().HasData(
-        //           new List<IdentityUserClaim<Guid>>()
-        //           {
-        //           new IdentityUserClaim<Guid>()
-        //           {
-        //               Id = 3000,
-        //               ClaimType = JwtClaimTypes.Name,
-        //               ClaimValue = "admin2",
-        //               UserId = Guid.Parse("8e445865-a24d-4543-a6c6-9443d048cdb8")
-        //           },
-        //           new IdentityUserClaim<Guid>()
-        //           {
-        //               Id = 3001,
-        //               ClaimType = JwtClaimTypes.Id,
-        //               ClaimValue = "8e445865-a24d-4543-a6c6-9443d048cdb8",
-        //               UserId = Guid.Parse("8e445865-a24d-4543-a6c6-9443d048cdb8")
-        //           },
-        //           new IdentityUserClaim<Guid>()
-        //           {
-        //               Id = 3002,
-        //               ClaimType = ClaimTypes.Email,
-        //               ClaimValue = "admin2@gmail.com",
-        //               UserId = Guid.Parse("8e445865-a24d-4543-a6c6-9443d048cdb8")
-        //           },
-        //           new IdentityUserClaim<Guid>()
-        //           {
-
-        //               Id = 3003,
-        //               ClaimType = ClaimTypes.GivenName,
-        //               ClaimValue = "admin2 admin",
-        //               UserId = Guid.Parse("8e445865-a24d-4543-a6c6-9443d048cdb8")
-        //           },
-        //            new IdentityUserClaim<Guid>()
-        //           {
-        //               Id = 3006,
-        //               ClaimType = JwtClaimTypes.Role,
-        //               ClaimValue = RoleConstants.AdminRole,
-        //               UserId = Guid.Parse("8e445865-a24d-4543-a6c6-9443d048cdb8")
-        //           },
-        //           }
-        //           );
+           
         }
     }
 }
